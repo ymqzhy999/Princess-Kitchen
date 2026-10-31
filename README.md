@@ -2,7 +2,7 @@
 
 > 专属于两个人的美食菜谱与点菜小屋。  
 > 移动端优先，粉粉的奶油甜品风，所有功能都可以真实点按使用。  
-> 当前版本 **1.2.0** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md)
+> 当前版本 **1.2.0** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
 
 这是当前网页版的完整实现：React + TypeScript + Vite + Tailwind CSS + React Router + Lucide Icons。结构化数据保存在浏览器 `localStorage`，用户上传的菜品图保存在 IndexedDB。没有后端、没有登录、没有真实支付，也不包含 Android 原生工程或 APK 配置。
 
@@ -86,6 +86,7 @@ pnpm preview         # 预览生产构建，默认 http://localhost:4173/
 
 ```text
 princess-kitchen/
+├── .github/workflows/deploy.yml       # GitHub Pages 自动发布
 ├── public/
 │   ├── favicon.svg
 │   ├── credits.html               # 图片来源与许可（应用内可打开）
@@ -143,6 +144,8 @@ princess-kitchen/
 ├── IMAGE_TODO.md                  # 21 道待补图清单与图片要求
 ├── PROJECT_SUMMARY.md             # 目录、数据流、功能总览
 ├── GITHUB_UPLOAD.md               # GitHub 上传与电脑开发步骤
+├── DEPLOY_PAGES.md                # Pages 自动部署步骤
+├── scripts/prepare-pages.mjs      # 生成 .nojekyll 与 404 重定向
 └── README.md
 ```
 

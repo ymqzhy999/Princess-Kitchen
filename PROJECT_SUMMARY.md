@@ -15,6 +15,7 @@
 - **21 道暂时没有合格图片**，显示「实拍图待补充」
 - **0 张 SVG 菜品图**
 - **21 个自动化测试全部通过**
+- **GitHub Pages Actions 自动部署已配置**（见 `DEPLOY_PAGES.md`）
 - 没有后端、登录、真实支付；数据只在本机
 
 ## 2. 页面与功能
@@ -70,6 +71,8 @@ princess-kitchen/
 ├── IMAGE_TODO.md                    # 21 道待补图清单
 ├── PROJECT_SUMMARY.md               # 本文件
 ├── GITHUB_UPLOAD.md                 # 上传 GitHub / 电脑开发步骤
+├── DEPLOY_PAGES.md                  # GitHub Pages 部署步骤
+├── .github/workflows/deploy.yml      # Pages 自动发布
 ├── package.json
 ├── pnpm-lock.yaml
 └── vite.config.ts

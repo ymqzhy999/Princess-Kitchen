@@ -89,7 +89,14 @@ git push -u origin main
 
 ### GitHub Pages
 
-项目使用 `HashRouter` + Vite `base: './'`，部署到子路径也能正常打开。把 `dist/` 发布到 `gh-pages` 分支即可，或使用 GitHub Actions。
+项目已配置 GitHub Actions 自动发布：
+
+- workflow：`.github/workflows/deploy.yml`
+- 构建命令：`pnpm build:pages`
+- 仓库 `Settings → Pages → Source` 选择 **GitHub Actions**
+- 推送 `main` 后自动发布
+
+完整步骤见 [DEPLOY_PAGES.md](DEPLOY_PAGES.md)。
 
 ## 6. 上传图片为什么之前会“本机满了”
 
