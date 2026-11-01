@@ -67,7 +67,7 @@ export const sweetRecipes: Recipe[] = [
     id: 'dish_017',
     name: '杨枝甘露',
     category: '饮品',
-    coverImage: '',
+    coverImage: './images/recipes/dish_017.jpg',
     description:
       '芒果的甜、西柚的微苦和椰浆的香混在一起，配上 Q 弹的西米，冰冰凉凉。夏天的午后，一杯就足够治愈。',
     ingredients: [
@@ -124,7 +124,7 @@ export const sweetRecipes: Recipe[] = [
     id: 'dish_018',
     name: '奶油蘑菇意面',
     category: '西餐',
-    coverImage: '',
+    coverImage: './images/recipes/dish_018.jpg',
     description:
       '口蘑和培根的香气融进奶白的酱汁，每条意面都裹得浓浓的。点上蜡烛，在家也能拥有一顿像样的小晚餐。',
     ingredients: [
@@ -186,7 +186,7 @@ export const sweetRecipes: Recipe[] = [
     id: 'dish_019',
     name: '日式照烧鸡腿饭',
     category: '日料',
-    coverImage: '',
+    coverImage: './images/recipes/dish_019.jpg',
     description:
       '鸡腿煎到皮脆肉嫩，裹上亮晶晶的照烧汁，铺在热米饭上，再配几朵西兰花。甜咸适口，便当和晚餐都合适。',
     ingredients: [
@@ -248,7 +248,7 @@ export const sweetRecipes: Recipe[] = [
     id: 'dish_020',
     name: '日式玉子烧',
     category: '日料',
-    coverImage: '',
+    coverImage: './images/recipes/dish_020.jpg',
     description:
       '一层层卷起的柔软蛋卷，带着淡淡的高汤和甜味。切开后切面层层叠叠，做成早餐或者便当配菜都很可爱。',
     ingredients: [

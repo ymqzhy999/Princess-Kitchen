@@ -2,14 +2,14 @@
 
 本应用共 54 道菜谱：20 道 Princess Kitchen 原创，34 道来自 [HowToCook](https://github.com/Anduin2017/HowToCook)（Unlicense）。
 
-当前 **33 道**有实拍图，**21 道**待补图；已按要求不再使用 SVG 占位图。
+当前 **54 道菜谱全部有图**：**33 张实拍照片** + **21 张 Agnes AI 生成图**（2026-11 补，非真实拍摄）。生成图只用于先把卡片补齐，收到合格实拍照片后按 [IMAGE_TODO.md](IMAGE_TODO.md) 覆盖同名文件即可；不再使用 SVG 占位图。
 
 ## 图片构成
 
 - HowToCook 仓库原图（14 张，Unlicense）
 - 用户提供的 DOCX 文档图片（9 张）：蒜蓉西兰花、白灼虾、广式萝卜牛腩、烤鸡翅、家常日本豆腐、剁椒鱼头、蒜香烤鸡翅、水煮牛肉、提拉米苏
 - Wikimedia Commons 图片（10 张，CC0 / CC BY / CC BY-SA，见下表）
-- 待补实拍图（21 道），清单见 [IMAGE_TODO.md](IMAGE_TODO.md)
+- Agnes AI 生成图（21 张，模型 `agnes-image-2.1-flash`，2026-11 生成；提示词与生成参数见 `scripts/agnes-prompts.json`）
 
 ## Wikimedia Commons 署名
 
@@ -27,6 +27,26 @@
 | 手抓饼 | Sdkb | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Green_onion_cakes_in_Edmonton.jpg) |
 
 图片经过裁切、缩放与 JPEG 压缩，未改变画面内容。
+
+## AI 生成图片（21 张）
+
+下面 21 道菜原本没有合格实拍图，2026-11 用 **Agnes AI**（`agnes-image-2.1-flash`，1K / 4:3）按菜名生成，先把卡片补齐。它们是**生成图，不是真实拍摄**，与真实成菜外观可能有差别；拿到实拍照片后直接覆盖同名文件即可，并在这里改成照片作者。
+
+生成参数与每道菜的提示词见 [`scripts/agnes-prompts.json`](scripts/agnes-prompts.json)，重新生成命令见 [README · 补图](README.md#56-替换菜品图片)。
+
+| 菜谱 | 文件 | 菜谱 | 文件 |
+| --- | --- | --- | --- |
+| 白切鸡 | dish_004.jpg | 豉汁排骨 | dish_035.jpg |
+| 蜜汁叉烧 | dish_006.jpg | 奥尔良风味烤鸡腿 | dish_041.jpg |
+| 农家小炒肉 | dish_008.jpg | 地三鲜 | dish_021.jpg |
+| 番茄炒蛋 | dish_009.jpg | 土豆炖排骨 | dish_026.jpg |
+| 番茄牛腩火锅 | dish_012.jpg | 农家一碗香 | dish_039.jpg |
+| 皮蛋瘦肉粥 | dish_014.jpg | 水煮肉片 | dish_030.jpg |
+| 葱油拌面 | dish_015.jpg | 水煮鱼 | dish_031.jpg |
+| 杨枝甘露 | dish_017.jpg | 蒸水蛋 | dish_049.jpg |
+| 奶油蘑菇意面 | dish_018.jpg | 炒方便面 | dish_050.jpg |
+| 日式照烧鸡腿饭 | dish_019.jpg | 柠檬水 | dish_052.jpg |
+| 日式玉子烧 | dish_020.jpg |  |  |
 
 ## 其他
 - 图标：[Lucide](https://lucide.dev/)（ISC License）

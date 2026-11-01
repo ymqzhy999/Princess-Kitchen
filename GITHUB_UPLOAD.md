@@ -74,7 +74,7 @@ git push -u origin main
 保留：
 
 - `src/`
-- `public/`（33 张菜品图，约 5.4MB）
+- `public/`（54 张菜品图，约 8.5MB）
 - `pnpm-lock.yaml`
 - `README.md` / `CREDITS.md` / `IMAGE_TODO.md` / `PROJECT_SUMMARY.md`
 
@@ -119,7 +119,7 @@ git push -u origin main
 ## 7. 版本与数据
 
 - 当前版本：`1.2.0`
-- 54 道菜、13 个分类、33 张实拍图、21 道待补图
+- 54 道菜、13 个分类、54 张菜品图（33 实拍 + 21 张 Agnes 生成图）
 - 自定义图片：IndexedDB
 - 收藏 / 菜单 / 日记 / 设置：localStorage
 - 换电脑不会自动同步任何数据

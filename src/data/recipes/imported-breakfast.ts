@@ -168,7 +168,7 @@ export const importedBreakfastRecipes: Recipe[] = [
     id: "dish_049",
     name: "蒸水蛋",
     category: "早餐",
-    coverImage: '',
+    coverImage: './images/recipes/dish_049.jpg',
     description: "这是一道以滑嫩如布丁的口感和清雅鲜美的风味见长的家常菜，南北通吃，北方常亲切地称其为“鸡蛋糕儿”。鸡蛋富含优质蛋白和卵磷脂，是日常补充营养的便捷之选。做法只需掌握蛋水比例和小火慢蒸的诀窍，对新手非常友好，从准备到出锅通常 大约 15 分钟就能完成。",
     ingredients: [
       {"name": "鸡蛋", "amount": "2 个"},
@@ -198,7 +198,7 @@ export const importedBreakfastRecipes: Recipe[] = [
     id: "dish_050",
     name: "炒方便面",
     category: "主食",
-    coverImage: '',
+    coverImage: './images/recipes/dish_050.jpg',
     description: "这道炒方便面口感 Q 弹筋道，咸香入味，是一道改良自传统煮面的家常快手主食。搭配鸡蛋和火腿肠，丰富了蛋白质和能量来源。做法简单，只需注意冷水冲面保持口感，新手也能轻松完成，全程大约 15 分钟即可出锅。",
     ingredients: [
       {"name": "方便面", "amount": "2 包"},
@@ -260,7 +260,7 @@ export const importedBreakfastRecipes: Recipe[] = [
     id: "dish_052",
     name: "柠檬水",
     category: "饮品",
-    coverImage: '',
+    coverImage: './images/recipes/dish_052.jpg',
     description: "这道饮品以新鲜柠檬为主角，搭配果蜜调和，酸甜平衡，冰镇后更感清凉解暑。柠檬富含维生素 C，经常饮用有助于补充营养、提神美白。制作步骤极简，只需捶打、加料、摇晃，新手也能在三五分钟内完成。",
     ingredients: [
       {"name": "柠檬", "amount": "1 个（约 45g）"},

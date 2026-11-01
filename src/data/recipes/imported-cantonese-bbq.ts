@@ -43,7 +43,7 @@ export const importedCantoneseBbqRecipes: Recipe[] = [
     id: "dish_035",
     name: "豉汁排骨",
     category: "粤菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_035.jpg',
     description: "这是一道粤式茶楼里的人气蒸点，豉香醇厚，排骨滑嫩脱骨。排骨提供优质蛋白和钙质，发酵豆豉增添风味也更利吸收。做法需经过泡洗、腌制和控火蒸制，对新手稍有考验，但步骤清晰易上手，从备料到出锅大约只需 1 小时。剩余的汤汁用来拌饭或拌面格外鲜美。",
     ingredients: [
       {"name": "肋排", "amount": "500g"},
@@ -163,7 +163,7 @@ export const importedCantoneseBbqRecipes: Recipe[] = [
     id: "dish_041",
     name: "奥尔良风味烤鸡腿",
     category: "烧烤",
-    coverImage: '',
+    coverImage: './images/recipes/dish_041.jpg',
     description: "奥尔良风味烤鸡腿是一道简单易做的菜，富含蛋白质和铁。总共花费约 3 小时，其中手动操作时间约 20 分钟。",
     ingredients: [
       {"name": "手枪腿鸡腿", "amount": "2 只"},

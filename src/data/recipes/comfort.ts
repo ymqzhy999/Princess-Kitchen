@@ -7,7 +7,7 @@ export const comfortRecipes: Recipe[] = [
     id: 'dish_012',
     name: '番茄牛腩火锅',
     category: '火锅',
-    coverImage: '',
+    coverImage: './images/recipes/dish_012.jpg',
     description:
       '番茄熬出浓浓的红汤，牛腩炖到软烂，再涮上金针菇、娃娃菜和宽粉。两个人围着一个小锅，就是最热闹的晚餐。',
     ingredients: [
@@ -134,7 +134,7 @@ export const comfortRecipes: Recipe[] = [
     id: 'dish_014',
     name: '皮蛋瘦肉粥',
     category: '早餐',
-    coverImage: '',
+    coverImage: './images/recipes/dish_014.jpg',
     description:
       '米粒熬到开花，皮蛋的醇香和瘦肉的鲜味融进粥里，撒一点白胡椒和葱花。胃不舒服的早晨，最需要这一碗。',
     ingredients: [
@@ -195,7 +195,7 @@ export const comfortRecipes: Recipe[] = [
     id: 'dish_015',
     name: '葱油拌面',
     category: '主食',
-    coverImage: '',
+    coverImage: './images/recipes/dish_015.jpg',
     description:
       '小葱在油里慢慢熬到焦香，酱汁甜咸浓郁，拌上热面条，简单却让人一口接一口。深夜饿了，二十分钟就能吃到。',
     ingredients: [

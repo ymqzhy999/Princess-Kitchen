@@ -68,7 +68,7 @@ export const hunanHomeRecipes: Recipe[] = [
     id: 'dish_008',
     name: '农家小炒肉',
     category: '湘菜',
-    coverImage: '',
+    coverImage: './images/recipes/dish_008.jpg',
     description:
       '五花肉煸到微微卷边，青椒炒出虎皮，豆豉和酱油的香气混在一起。锅气十足，一碗米饭根本不够。',
     ingredients: [
@@ -125,7 +125,7 @@ export const hunanHomeRecipes: Recipe[] = [
     id: 'dish_009',
     name: '番茄炒蛋',
     category: '家常菜',
-    coverImage: '',
+    coverImage: './images/recipes/dish_009.jpg',
     description:
       '鸡蛋蓬松柔软，番茄炒出酸甜的汁水，浇在米饭上能拌出满满一碗。最简单的家常味道，也最让人安心。',
     ingredients: [

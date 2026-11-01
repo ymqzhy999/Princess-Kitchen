@@ -1,7 +1,7 @@
 # 项目总结 · Princess Kitchen
 
 > 公主的私房小厨房，送给戴诗佳女士。  
-> 当前版本：**1.2.0**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
+> 当前版本：**1.3.0**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
 
 ## 1. 项目定位
 
@@ -11,10 +11,11 @@
 
 - **54 道菜谱**：20 道原创 + 34 道 HowToCook 导入
 - **13 个分类**：家常菜、川菜、粤菜、湘菜、火锅、烧烤、早餐、主食、甜品、饮品、西餐、日料、其他
-- **33 张实拍菜品图**
-- **21 道暂时没有合格图片**，显示「实拍图待补充」
+- **54 张菜品图**：33 张实拍 + 21 张 Agnes AI 生成图（生成图非实拍，见 `CREDITS.md`）
+- **0 道缺图**：原来 21 道缺图已用生成图补齐，卡片不再显示「实拍图待补充」
 - **0 张 SVG 菜品图**
 - **21 个自动化测试全部通过**
+- **补图工装**：`scripts/agnes-image.mjs` + `scripts/agnes-prompts.json`（Agnes 生图、PNG→JPEG、写回 coverImage）
 - **GitHub Pages Actions 自动部署已配置**（见 `DEPLOY_PAGES.md`）
 - 没有后端、登录、真实支付；数据只在本机
 
@@ -41,7 +42,7 @@ princess-kitchen/
 ├── public/
 │   ├── favicon.svg
 │   ├── credits.html                 # 应用内图片来源页
-│   └── images/recipes/              # 33 张 JPG 菜品图
+│   └── images/recipes/              # 54 张 JPG（33 实拍 + 21 生成）
 ├── src/
 │   ├── config/app.ts                # 名称、版本、参考项目
 │   ├── types/                       # Recipe / App 数据类型
@@ -68,7 +69,11 @@ princess-kitchen/
 │   └── test/                        # Vitest + Testing Library
 ├── README.md                        # 运行与完整说明
 ├── CREDITS.md                       # 图片许可
-├── IMAGE_TODO.md                    # 21 道待补图清单
+├── IMAGE_TODO.md                    # 21 张生成图的待替换清单
+├── scripts/
+│   ├── agnes-image.mjs              # Agnes 生图 → JPEG → 写回 coverImage
+│   ├── agnes-prompts.json           # 21 道菜的生成提示词与参数
+│   └── prepare-pages.mjs            # Pages 发布整理
 ├── PROJECT_SUMMARY.md               # 本文件
 ├── GITHUB_UPLOAD.md                 # 上传 GitHub / 电脑开发步骤
 ├── DEPLOY_PAGES.md                  # GitHub Pages 部署步骤
@@ -114,7 +119,7 @@ pnpm preview
 - 无后端 / 账号 / 双人同步；换设备数据不跟随。
 - 自定义菜品图只在本机 IndexedDB，不上传服务器。
 - 没有 APK / Capacitor 原生工程 / 微信小程序。
-- 21 道菜仍缺合格实拍图，清单见 `IMAGE_TODO.md`。
+- 21 道菜的图是 Agnes AI 生成的示意图（不是实拍），想换成真实成菜照片见 `IMAGE_TODO.md`。
 - 部分图片来自 HowToCook / Wikimedia / 用户提供文档，许可见 `CREDITS.md`。
 
 ## 8. 版权

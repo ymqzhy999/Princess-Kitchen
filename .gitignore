@@ -26,3 +26,6 @@ Thumbs.db
 # test output
 coverage/
 .tmp-*
+.agnes-key
+scripts/.agnes-key
+scripts/.agnes-report.json

@@ -7,7 +7,7 @@ export const cantoneseRecipes: Recipe[] = [
     id: 'dish_004',
     name: '白切鸡',
     category: '粤菜',
-    coverImage: '',
+    coverImage: './images/recipes/dish_004.jpg',
     description:
       '皮爽肉滑、原汁原味，蘸一碟姜葱油就足够惊艳。做法不复杂，却特别适合周末慢慢做给重要的人吃。',
     ingredients: [
@@ -123,7 +123,7 @@ export const cantoneseRecipes: Recipe[] = [
     id: 'dish_006',
     name: '蜜汁叉烧',
     category: '粤菜',
-    coverImage: '',
+    coverImage: './images/recipes/dish_006.jpg',
     description:
       '梅花肉腌足一夜，烤到边缘微焦，刷上蜂蜜后再回炉两分钟。切开时肉汁亮晶晶，甜咸交织，配饭配面都合适。',
     ingredients: [

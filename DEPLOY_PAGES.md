@@ -119,7 +119,7 @@ Settings → Actions → General → Workflow permissions
 
 ### 图片/自定义图
 
-- 33 张内置图随 `dist` 一起发布；
+- 54 张内置图随 `dist` 一起发布；
 - 用户从相册上传的图保存在各自手机的 IndexedDB，不会上传服务器，也不会跨设备同步；
 - 换浏览器/清缓存会丢失自定义图。
 

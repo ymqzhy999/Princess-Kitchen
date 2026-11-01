@@ -35,7 +35,7 @@
   </div>
   <section>
     <h2>菜谱文字</h2>
-    <p>本应用共 <strong>54 道菜谱</strong>，当前 <strong>33 道</strong>有实拍图、<strong>21 道</strong>待补图。其中 <strong>20 道</strong>为 Princess Kitchen 原创编写；<strong>34 道</strong>来自开源项目 <a href="https://github.com/Anduin2017/HowToCook" target="_blank" rel="noreferrer">HowToCook</a>（Unlicense 公共领域），保留原文用量与步骤，并按手机阅读重新排版。</p>
+    <p>本应用共 <strong>54 道菜谱</strong>，现在每道菜都有图：<strong>33 张实拍照片</strong> + <strong>21 张 Agnes AI 生成图</strong>。其中 <strong>20 道</strong>为 Princess Kitchen 原创编写；<strong>34 道</strong>来自开源项目 <a href="https://github.com/Anduin2017/HowToCook" target="_blank" rel="noreferrer">HowToCook</a>（Unlicense 公共领域），保留原文用量与步骤，并按手机阅读重新排版。</p>
     <p class="muted">你提供的《精选菜谱合集 v2 · 39 道含图》中有 5 道与本项目已有菜谱重复，已以现有版本保留，未重复录入。</p>
   </section>
   <section>
@@ -44,7 +44,7 @@
       <li><strong>HowToCook 仓库原图（14 张）</strong>：随项目以 Unlicense 发布，已压缩为网页尺寸。</li>
       <li><strong>你提供的 DOCX 文档图片（9 张）</strong>：蒜蓉西兰花、白灼虾、广式萝卜牛腩、烤鸡翅、家常日本豆腐、剁椒鱼头、蒜香烤鸡翅、水煮牛肉、提拉米苏。</li>
       <li><strong>Wikimedia Commons 图片（10 张）</strong>：均为 CC0 / CC BY / CC BY-SA，逐张署名如下。</li>
-      <li><strong>暂无实拍图（21 道）</strong>：已按要求下架全部 SVG 占位图，卡片暂显示「实拍图待补充」，收到合格照片后替换。</li>
+      <li><strong>Agnes AI 生成图（21 张）</strong>：2026-11 用 <code>agnes-image-2.1-flash</code> 按菜名生成，用于把原本缺图的卡片补齐；这些是生成图、不是真实拍摄，收到合格实拍照片后覆盖同名文件即可。</li>
     </ul>
   </section>
   <section>
@@ -66,11 +66,17 @@
     </table>
   </section>
   <section>
+    <h2>AI 生成图片（21 张）</h2>
+    <p>下面 21 道菜原本没有合格实拍图，2026-11 用 <strong>Agnes AI</strong>（<code>agnes-image-2.1-flash</code>，1K / 4:3）生成，先把卡片补齐。它们是<strong>生成图，不是真实拍摄</strong>，与真实成菜外观可能有差别；拿到实拍照片后直接覆盖 <code>public/images/recipes/&lt;id&gt;.jpg</code> 即可，署名也改成照片作者。</p>
+    <p class="muted">生成参数与每道菜的提示词见仓库 <code>scripts/agnes-prompts.json</code>，重新生成的命令见 README「替换 / 生成菜品图片」。</p>
+    <div><span class="pill">白切鸡</span><span class="pill">蜜汁叉烧</span><span class="pill">农家小炒肉</span><span class="pill">番茄炒蛋</span><span class="pill">番茄牛腩火锅</span><span class="pill">皮蛋瘦肉粥</span><span class="pill">葱油拌面</span><span class="pill">杨枝甘露</span><span class="pill">奶油蘑菇意面</span><span class="pill">日式照烧鸡腿饭</span><span class="pill">日式玉子烧</span><span class="pill">地三鲜</span><span class="pill">土豆炖排骨</span><span class="pill">水煮肉片</span><span class="pill">水煮鱼</span><span class="pill">豉汁排骨</span><span class="pill">农家一碗香</span><span class="pill">奥尔良风味烤鸡腿</span><span class="pill">蒸水蛋</span><span class="pill">炒方便面</span><span class="pill">柠檬水</span></div>
+  </section>
+  <section>
     <h2>字体与图标</h2>
     <ul>
       <li>界面字体使用系统字体，不加载外部字体文件。</li>
       <li>图标来自 <a href="https://lucide.dev/" target="_blank" rel="noreferrer">Lucide</a>（ISC License）。</li>
-      <li>当前不再使用 SVG 作为菜品图片；缺图菜谱显示统一的简洁占位提示。</li>
+      <li>当前不再使用 SVG 作为菜品图片；图片缺失或加载失败时显示统一的简洁占位提示。</li>
       <li>用户从相册上传的菜品图仅保存在本机浏览器，不上传到服务器，也不参与上面的来源署名。</li>
     </ul>
   </section>

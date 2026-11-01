@@ -6,7 +6,7 @@ export const importedHomeRecipes: Recipe[] = [
     id: "dish_021",
     name: "地三鲜",
     category: "家常菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_021.jpg',
     description: "地三鲜是东北经典家常菜，茄子软糯、土豆绵香、尖椒清脆，酱香咸鲜十分下饭。食材搭配可提供丰富的维生素与膳食纤维，土豆还带来满足的碳水能量。这道菜需要油炸和快速翻炒，有一定技巧要求，新手需稍加练习，制作全程约需 40 分钟。",
     ingredients: [
       {"name": "茄子", "amount": "200g"},
@@ -187,7 +187,7 @@ export const importedHomeRecipes: Recipe[] = [
     id: "dish_026",
     name: "土豆炖排骨",
     category: "家常菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_026.jpg',
     description: "排骨软烂脱骨，土豆绵软入味，酱香浓郁微甜微辣，是一道典型的北方家常炖菜。富含蛋白质、钙质和碳水化合物，营养均衡。制作略有难度，需掌握炒糖色与火候，但步骤清晰，新手也能尝试，全程大约 1.5 小时。",
     ingredients: [
       {"name": "肋排", "amount": "750g"},
@@ -267,7 +267,7 @@ export const importedHomeRecipes: Recipe[] = [
     id: "dish_039",
     name: "农家一碗香",
     category: "湘菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_039.jpg',
     description: "这是一道咸香下饭的湖南家常小炒，五花肉的油润、鸡蛋的嫩滑与青椒的清香彼此融合，口感层次丰富。猪肉与鸡蛋提供优质蛋白质，搭配青椒补充维生素 C，营养均衡。中等难度，需要注意煸炒火候和调味顺序，新手稍加练习也能做好。预计备菜 7 分钟，烹饪 10 分钟，总共约 17 分钟就能出锅。",
     ingredients: [
       {"name": "猪肉", "amount": "250g"},

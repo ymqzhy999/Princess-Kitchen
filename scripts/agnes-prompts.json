@@ -1,0 +1,114 @@
+{
+  "$comment": "Agnes 生图清单：补 21 道缺图菜谱。改 prompt 后重跑 `node scripts/agnes-image.mjs --only=dish_004 --force`。",
+  "model": "agnes-image-2.1-flash",
+  "size": "1K",
+  "ratio": "4:3",
+  "style": "Chinese home-style plating on a clean plain light background, soft natural window light, 45-degree angle, realistic professional food photography, appetizing, no people, no hands, no chopsticks, no text, no watermark",
+  "dishes": [
+    {
+      "id": "dish_004",
+      "name": "白切鸡",
+      "prompt": "Cantonese white-cut chicken (bai qie ji), neatly sliced poached chicken with pale golden skin arranged on a white ceramic plate, a small bowl of ginger-scallion oil dipping sauce beside it"
+    },
+    {
+      "id": "dish_006",
+      "name": "蜜汁叉烧",
+      "prompt": "Cantonese honey-glazed BBQ pork (char siu), slices of roast pork with glossy reddish-brown caramelized glaze, slightly charred edges, arranged on a white plate"
+    },
+    {
+      "id": "dish_008",
+      "name": "农家小炒肉",
+      "prompt": "Hunan farmhouse stir-fried pork (nongjia xiaochao rou), thin slices of pork with green chili peppers, wok-fried with dark soy sauce, glistening, served on a white plate"
+    },
+    {
+      "id": "dish_009",
+      "name": "番茄炒蛋",
+      "prompt": "Chinese tomato and scrambled egg stir-fry (fanqie chaodan), soft fluffy yellow egg pieces with juicy red tomato wedges, light sauce, on a white plate"
+    },
+    {
+      "id": "dish_012",
+      "name": "番茄牛腩火锅",
+      "prompt": "Tomato beef brisket hot pot, chunks of braised beef brisket in a rich red tomato broth in a black clay pot, garnished with chopped scallion, gentle steam rising"
+    },
+    {
+      "id": "dish_014",
+      "name": "皮蛋瘦肉粥",
+      "prompt": "Century egg and pork congee (pidan shourou zhou), creamy white rice porridge in a white bowl topped with diced dark century egg, shredded pork and chopped scallion"
+    },
+    {
+      "id": "dish_015",
+      "name": "葱油拌面",
+      "prompt": "Scallion oil noodles (congyou banmian), thin wheat noodles tossed in dark glossy scallion oil and soy sauce, topped with crispy fried scallion strips, in a white bowl"
+    },
+    {
+      "id": "dish_017",
+      "name": "杨枝甘露",
+      "prompt": "Mango pomelo sago dessert (yangzhi ganlu), vibrant orange-yellow mango cream with fresh mango cubes, pomelo pulp and translucent sago pearls, served in a clear glass"
+    },
+    {
+      "id": "dish_018",
+      "name": "奶油蘑菇意面",
+      "prompt": "Creamy mushroom pasta, spaghetti coated in white cream sauce with sliced button mushrooms, a light dusting of black pepper and parsley, on a white plate"
+    },
+    {
+      "id": "dish_019",
+      "name": "日式照烧鸡腿饭",
+      "prompt": "Japanese teriyaki chicken rice bowl (teriyaki donburi), sliced glazed chicken thigh with shiny dark teriyaki sauce over steamed white rice, a few sesame seeds, in a white bowl"
+    },
+    {
+      "id": "dish_020",
+      "name": "日式玉子烧",
+      "prompt": "Japanese rolled omelette (tamagoyaki), golden-yellow rolled egg cut into thick slices showing soft layered interior, arranged on a white plate"
+    },
+    {
+      "id": "dish_021",
+      "name": "地三鲜",
+      "prompt": "Northeastern Chinese dish sanxian (di san xian), fried potato chunks, eggplant pieces and green bell pepper stir-fried in savory brown sauce, on a white plate"
+    },
+    {
+      "id": "dish_026",
+      "name": "土豆炖排骨",
+      "prompt": "Chinese braised pork ribs with potatoes (tudou dun paigu), tender ribs and potato chunks in a glossy brown sauce, garnished with scallion, in a white bowl"
+    },
+    {
+      "id": "dish_030",
+      "name": "水煮肉片",
+      "prompt": "Sichuan boiled pork slices (shuizhu roupian), tender pork slices in fiery red chili oil broth with dried chilies and Sichuan peppercorns, bean sprouts underneath, in a white bowl"
+    },
+    {
+      "id": "dish_031",
+      "name": "水煮鱼",
+      "prompt": "Sichuan boiled fish (shuizhu yu), white fish fillet slices in bright red chili oil broth topped with dried red chilies, Sichuan peppercorns and chopped scallion, in a wide white bowl"
+    },
+    {
+      "id": "dish_035",
+      "name": "豉汁排骨",
+      "prompt": "Cantonese steamed pork ribs with black bean sauce (chizhi paigu), bone-in pork ribs coated in a light glossy reddish-brown sauce with scattered fermented black beans, tender and juicy, topped with a few red chili slices and chopped scallion, in a shallow white dish"
+    },
+    {
+      "id": "dish_039",
+      "name": "农家一碗香",
+      "prompt": "Hunan farmhouse one-bowl stir-fry (nongjia yiwan xiang), sliced pork with green chili peppers, scrambled egg pieces and a little preserved radish, wok-fried, on a white plate"
+    },
+    {
+      "id": "dish_041",
+      "name": "奥尔良风味烤鸡腿",
+      "prompt": "New Orleans style roasted chicken drumsticks, two glossy reddish-orange glazed chicken legs with charred spots, arranged on a white plate"
+    },
+    {
+      "id": "dish_049",
+      "name": "蒸水蛋",
+      "prompt": "Chinese steamed egg custard (zheng shuidan), silky smooth pale yellow egg custard in a shallow white bowl, drizzled with light soy sauce and a little sesame oil, chopped scallion on top"
+    },
+    {
+      "id": "dish_050",
+      "name": "炒方便面",
+      "prompt": "Stir-fried instant noodles, wavy noodles tossed with shredded cabbage, carrot strips and green onion in savory sauce, on a white plate"
+    },
+    {
+      "id": "dish_052",
+      "name": "柠檬水",
+      "prompt": "Fresh lemonade in a clear glass with ice cubes and lemon slices, pale yellow, condensation on the glass, a mint leaf, clean bright background"
+    }
+  ]
+}

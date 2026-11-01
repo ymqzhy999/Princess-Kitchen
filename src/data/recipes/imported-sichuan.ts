@@ -115,7 +115,7 @@ export const importedSichuanRecipes: Recipe[] = [
     id: "dish_030",
     name: "水煮肉片",
     category: "川菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_030.jpg',
     description: "水煮肉片是一道麻辣鲜香、肉片滑嫩、配菜爽脆的经典川菜，极其适合下饭。猪里脊提供优质蛋白质，搭配豆芽等蔬菜，营养均衡。做法稍显繁琐，尤其需要耐心腌制肉片和制作刀口辣椒，新手大约需要 1 至 2 小时完成。",
     ingredients: [
       {"name": "里脊肉", "amount": "300g"},
@@ -169,7 +169,7 @@ export const importedSichuanRecipes: Recipe[] = [
     id: "dish_031",
     name: "水煮鱼",
     category: "川菜",
-    coverImage: '',
+    coverImage: './images/recipes/dish_031.jpg',
     description: "水煮鱼是一道麻辣鲜香、鱼肉嫩滑的经典川菜。巴沙鱼富含优质蛋白且脂肪含量低，搭配时令蔬菜营养均衡。做法中等难度，对新手有一定挑战，但按步骤操作也能成功。预计制作时长约 2 小时。",
     ingredients: [
       {"name": "巴沙鱼", "amount": "500g"},
