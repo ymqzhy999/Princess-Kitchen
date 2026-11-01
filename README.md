@@ -2,7 +2,7 @@
 
 > 专属于两个人的美食菜谱与点菜小屋。  
 > 移动端优先，粉粉的奶油甜品风，所有功能都可以真实点按使用。  
-> 当前版本 **1.3.0** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
+> 当前版本 **1.4.0** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
 
 这是当前网页版的完整实现：React + TypeScript + Vite + Tailwind CSS + React Router + Lucide Icons。结构化数据保存在浏览器 `localStorage`，用户上传的菜品图保存在 IndexedDB。没有后端、没有登录、没有真实支付，也不包含 Android 原生工程或 APK 配置。
 
@@ -92,7 +92,7 @@ princess-kitchen/
 ├── public/
 │   ├── favicon.svg
 │   ├── credits.html               # 图片来源与许可（应用内可打开）
-│   └── images/recipes/            # 54 张 JPG（33 实拍 + 21 张 Agnes 生成，无 SVG）
+│   └── images/recipes/            # 54 张 JPG，全部 Agnes AI 生成（无 SVG）
 ├── src/
 │   ├── App.tsx                    # 路由表
 │   ├── main.tsx                   # 入口：HashRouter + Provider
@@ -240,7 +240,7 @@ DOCX 由自动导出生成，存在 **ID 重复、烹饪时间错误、图片错
 
 ### 5.6 替换 / 生成菜品图片
 
-`public/images/recipes/` 现在有 **54 张 JPG**：33 张实拍图 + 21 张 **Agnes AI 生成图**（生成图不是实拍，清单与替换说明见 [IMAGE_TODO.md](IMAGE_TODO.md)）。**菜品图不使用 SVG**。
+`public/images/recipes/` 现在有 **54 张 JPG，全部由 Agnes AI 生成**（提示词见 `scripts/agnes-prompts.json`）。它们是示意图、不是实拍，来源说明见 [CREDITS.md](CREDITS.md) / [IMAGE_TODO.md](IMAGE_TODO.md)。**菜品图不使用 SVG**。
 
 - 换某道菜的图：新增 `.jpg` / `.webp` 后修改对应 `coverImage`，路径始终使用相对路径；
 - 换成实拍照片：准备一张真实成菜图，**直接覆盖同名 `dish_XXX.jpg`** 即可，`coverImage` 不用改；
@@ -389,7 +389,7 @@ npx cap open android
 - 没有后端、账号、双人同步，换设备数据不会跟随；
 - 没有真实支付，“参考食材成本”只是按两人份估算；
 - 没有 Android 原生工程、APK、微信小程序；
-- 21 道菜的图是 Agnes AI 生成的示意图（不是实拍），想换成真实成菜照片直接覆盖同名文件；清单见 [IMAGE_TODO.md](IMAGE_TODO.md)；
+- 54 张菜品图都是 Agnes AI 生成的示意图（不是实拍），想换成真实成菜照片直接覆盖同名文件，见 [IMAGE_TODO.md](IMAGE_TODO.md)；
 - 部分导入菜谱的原文表述较“程序员风”，已做轻量整理，但仍保留原始用量；如发现不准确，欢迎直接改 `src/data/recipes/imported-*.ts`；
 - 没有接入在线字体，标题使用系统衬线字体回退，离线也能正常显示；
 - 日记照片/头像仍存 localStorage；菜品图已改存 IndexedDB，容量比 localStorage 大，但仍只在本机；大量高清照片请等云端版本；
@@ -403,7 +403,7 @@ npx cap open android
 
 - 20 道原创菜谱：Princess Kitchen 原创编写。
 - 34 道导入菜谱：来自 [HowToCook · 程序员做饭指南](https://github.com/Anduin2017/HowToCook)（Unlicense），按原文重新解析与排版，详情页保留来源链接。
-- 图片：HowToCook 仓库原图（14 张）、用户提供的 DOCX 图片（9 张）、Wikimedia Commons（10 张，CC0 / CC BY / CC BY-SA）、Agnes AI 生成图（21 张，2026-11，提示词见 `scripts/agnes-prompts.json`），逐张说明见 [CREDITS.md](CREDITS.md) 与 [credits.html](public/credits.html)；全部 SVG 菜品图已移除。
+- 图片：54 张全部由 Agnes AI 生成（2026-11，`agnes-image-2.1-flash`，提示词见 `scripts/agnes-prompts.json`），说明见 [CREDITS.md](CREDITS.md) 与 [credits.html](public/credits.html)；v1.2.0 及更早使用的 HowToCook / Wikimedia / 文档图已全部替换，署名记录留在 git 历史；SVG 菜品图已移除。
 - 图标：[Lucide](https://lucide.dev/)（ISC License）。
 - 字体：系统字体，不额外加载网络字体。
 

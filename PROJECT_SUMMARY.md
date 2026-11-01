@@ -1,7 +1,7 @@
 # 项目总结 · Princess Kitchen
 
 > 公主的私房小厨房，送给戴诗佳女士。  
-> 当前版本：**1.3.0**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
+> 当前版本：**1.4.0**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
 
 ## 1. 项目定位
 
@@ -11,8 +11,8 @@
 
 - **54 道菜谱**：20 道原创 + 34 道 HowToCook 导入
 - **13 个分类**：家常菜、川菜、粤菜、湘菜、火锅、烧烤、早餐、主食、甜品、饮品、西餐、日料、其他
-- **54 张菜品图**：33 张实拍 + 21 张 Agnes AI 生成图（生成图非实拍，见 `CREDITS.md`）
-- **0 道缺图**：原来 21 道缺图已用生成图补齐，卡片不再显示「实拍图待补充」
+- **54 张菜品图**：全部由 Agnes AI 生成（非实拍，见 `CREDITS.md`）
+- **0 道缺图**：54 道全部有图，卡片不再出现「实拍图待补充」
 - **0 张 SVG 菜品图**
 - **21 个自动化测试全部通过**
 - **补图工装**：`scripts/agnes-image.mjs` + `scripts/agnes-prompts.json`（Agnes 生图、PNG→JPEG、写回 coverImage）
@@ -42,7 +42,7 @@ princess-kitchen/
 ├── public/
 │   ├── favicon.svg
 │   ├── credits.html                 # 应用内图片来源页
-│   └── images/recipes/              # 54 张 JPG（33 实拍 + 21 生成）
+│   └── images/recipes/              # 54 张 JPG，全部 AI 生成
 ├── src/
 │   ├── config/app.ts                # 名称、版本、参考项目
 │   ├── types/                       # Recipe / App 数据类型
@@ -119,7 +119,7 @@ pnpm preview
 - 无后端 / 账号 / 双人同步；换设备数据不跟随。
 - 自定义菜品图只在本机 IndexedDB，不上传服务器。
 - 没有 APK / Capacitor 原生工程 / 微信小程序。
-- 21 道菜的图是 Agnes AI 生成的示意图（不是实拍），想换成真实成菜照片见 `IMAGE_TODO.md`。
+- 54 张菜品图都是 Agnes AI 生成的示意图（不是实拍），想换成真实成菜照片见 `IMAGE_TODO.md`。
 - 部分图片来自 HowToCook / Wikimedia / 用户提供文档，许可见 `CREDITS.md`。
 
 ## 8. 版权

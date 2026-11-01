@@ -109,6 +109,171 @@
       "id": "dish_052",
       "name": "柠檬水",
       "prompt": "Fresh lemonade in a clear glass with ice cubes and lemon slices, pale yellow, condensation on the glass, a mint leaf, clean bright background"
+    },
+    {
+      "id": "dish_005",
+      "name": "清蒸鲈鱼",
+      "prompt": "Cantonese steamed sea bass (qingzheng luyu), whole steamed fish on a white oval plate drizzled with light soy sauce, topped with shredded scallion and ginger and a few red chili strips"
+    },
+    {
+      "id": "dish_013",
+      "name": "蒜香烤鸡翅",
+      "prompt": "Garlic roasted chicken wings, glossy golden-brown wings with charred edges, sprinkled with minced garlic and herbs, arranged on a white plate"
+    },
+    {
+      "id": "dish_007",
+      "name": "剁椒鱼头",
+      "prompt": "Hunan chopped chili fish head (duojiao yutou), steamed fish head covered with bright red chopped chilies and scallion, in a wide white dish"
+    },
+    {
+      "id": "dish_010",
+      "name": "红烧肉",
+      "prompt": "Chinese braised pork belly (hongshao rou), glossy dark red caramelized pork cubes in rich sauce, garnished with scallion, in a white bowl"
+    },
+    {
+      "id": "dish_011",
+      "name": "蒜蓉西兰花",
+      "prompt": "Stir-fried broccoli with garlic, bright green broccoli florets with minced garlic in light sauce, on a white plate"
+    },
+    {
+      "id": "dish_044",
+      "name": "茶叶蛋",
+      "prompt": "Chinese tea eggs (chayedan), boiled eggs with distinctive marbled dark-brown crack patterns on the white, two halved eggs showing marbled surface, on a small white plate"
+    },
+    {
+      "id": "dish_045",
+      "name": "煎饺",
+      "prompt": "Chinese pan-fried dumplings (jianjiao), crispy golden-brown bottoms facing up, arranged on a white plate with a small dish of black vinegar"
+    },
+    {
+      "id": "dish_046",
+      "name": "美式炒蛋",
+      "prompt": "American scrambled eggs, soft creamy yellow scrambled eggs on a slice of toast, on a white plate"
+    },
+    {
+      "id": "dish_047",
+      "name": "牛奶燕麦",
+      "prompt": "Milk oatmeal porridge in a white bowl topped with blueberries and banana slices, creamy texture"
+    },
+    {
+      "id": "dish_048",
+      "name": "手抓饼",
+      "prompt": "Chinese scallion pancake (shouzhuabing), flaky golden layered flatbread cut into pieces, on a white plate"
+    },
+    {
+      "id": "dish_051",
+      "name": "烤蛋挞",
+      "prompt": "Portuguese egg tarts, golden flaky pastry shells with glossy caramelized custard centers, two tarts on a white plate"
+    },
+    {
+      "id": "dish_053",
+      "name": "牛排",
+      "prompt": "Pan-seared beef steak, medium-rare sliced steak with grill marks, black pepper sauce, a sprig of rosemary, on a white plate"
+    },
+    {
+      "id": "dish_034",
+      "name": "白灼虾",
+      "prompt": "Cantonese blanched prawns (baizhuo xia), bright orange boiled shrimp arranged in a circle on a white plate with a small bowl of soy dipping sauce"
+    },
+    {
+      "id": "dish_036",
+      "name": "广式萝卜牛腩",
+      "prompt": "Cantonese braised beef brisket with white radish (luobo niunan), tender brisket chunks and radish in light brown broth, in a white bowl"
+    },
+    {
+      "id": "dish_037",
+      "name": "梅菜扣肉",
+      "prompt": "Mei cai kou rou, sliced braised pork belly with preserved mustard greens, glossy dark sauce, shaped into a dome on a white plate"
+    },
+    {
+      "id": "dish_042",
+      "name": "烤鸡翅",
+      "prompt": "Roasted chicken wings, golden-brown glazed wings with sesame seeds, arranged on a white plate"
+    },
+    {
+      "id": "dish_043",
+      "name": "烤茄子",
+      "prompt": "Chinese grilled eggplant with garlic sauce (kao qiezi), split eggplant topped with minced garlic, chili and scallion, on a white plate"
+    },
+    {
+      "id": "dish_022",
+      "name": "简易红烧肉",
+      "prompt": "Simple Chinese braised pork belly, reddish-brown glazed pork cubes with quail eggs in glossy sauce, in a white bowl"
+    },
+    {
+      "id": "dish_023",
+      "name": "可乐鸡翅",
+      "prompt": "Cola chicken wings (kele jichi), glossy dark caramel-glazed wings sprinkled with white sesame seeds, on a white plate"
+    },
+    {
+      "id": "dish_024",
+      "name": "手撕包菜",
+      "prompt": "Hand-torn cabbage stir-fry (shousi baocai), wok-charred green cabbage leaves with dried chili, on a white plate"
+    },
+    {
+      "id": "dish_025",
+      "name": "酸辣土豆丝",
+      "prompt": "Chinese hot and sour shredded potato (suanla tudousi), short thin julienned potato strips stir-fried with red chili and green pepper in glossy vinegar sauce, piled on a white plate"
+    },
+    {
+      "id": "dish_038",
+      "name": "辣椒炒肉",
+      "prompt": "Hunan chili stir-fried pork (lajiao chaorou), sliced pork with green chilies in savory brown sauce, on a white plate"
+    },
+    {
+      "id": "dish_040",
+      "name": "小炒黄牛肉",
+      "prompt": "Hunan stir-fried beef with cilantro and chili (xiaochao huangniurou), thin beef slices with green and red chilies, on a white plate"
+    },
+    {
+      "id": "dish_054",
+      "name": "家常日本豆腐",
+      "prompt": "Home-style Japanese tofu, golden pan-fried egg tofu slices in savory brown sauce with scallion, in a white bowl"
+    },
+    {
+      "id": "dish_027",
+      "name": "回锅肉",
+      "prompt": "Sichuan twice-cooked pork (huiguo rou), sliced pork belly with green garlic sprouts and chili bean paste, on a white plate"
+    },
+    {
+      "id": "dish_028",
+      "name": "口水鸡",
+      "prompt": "Sichuan mouthwatering chicken (koushui ji), sliced poached chicken in red chili oil with sesame and peanuts, sprinkled with scallion, in a white bowl"
+    },
+    {
+      "id": "dish_029",
+      "name": "麻辣香锅",
+      "prompt": "Sichuan spicy dry pot (mala xiangguo), mixed vegetables, tofu skin, lotus root and meat stir-fried with dried chilies and Sichuan peppercorns, in a black pot"
+    },
+    {
+      "id": "dish_032",
+      "name": "鱼香茄子",
+      "prompt": "Sichuan fish-fragrant eggplant (yuxiang qiezi), braised eggplant strips in glossy reddish sauce with scallion and chili, on a white plate"
+    },
+    {
+      "id": "dish_033",
+      "name": "鱼香肉丝",
+      "prompt": "Sichuan fish-fragrant shredded pork (yuxiang rousi), pork shreds with wood ear, bamboo shoots and carrot in reddish sauce, on a white plate"
+    },
+    {
+      "id": "dish_001",
+      "name": "宫保鸡丁",
+      "prompt": "Kung pao chicken (gongbao jiding), diced chicken with roasted peanuts and dried chilies in glossy brown sauce, on a white plate"
+    },
+    {
+      "id": "dish_002",
+      "name": "麻婆豆腐",
+      "prompt": "Mapo tofu, silky tofu cubes in spicy red chili bean sauce with minced beef and Sichuan peppercorns, sprinkled with scallion, in a white bowl"
+    },
+    {
+      "id": "dish_003",
+      "name": "水煮牛肉",
+      "prompt": "Sichuan boiled beef (shuizhu niurou), tender beef slices in bright red chili oil with bean sprouts and dried chilies, in a white bowl"
+    },
+    {
+      "id": "dish_016",
+      "name": "提拉米苏",
+      "prompt": "Tiramisu slice on a white plate, cocoa powder dusting, creamy mascarpone layers, clean light background"
     }
   ]
 }
