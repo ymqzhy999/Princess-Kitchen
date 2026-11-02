@@ -30,8 +30,7 @@ export function RecipeCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-[26px] border border-white/80 bg-white/85 shadow-card transition-all duration-300',
-        'hover:-translate-y-0.5 hover:shadow-float',
+        'pk-scroll-card group relative flex flex-col overflow-hidden rounded-[26px] border border-white/80 bg-white shadow-card',
         className,
       )}
     >
@@ -43,11 +42,12 @@ export function RecipeCard({
         >
           <RecipeImage
             recipe={recipe}
+            size="thumb"
             loading={priority ? 'eager' : 'lazy'}
-            className="h-full w-full transition-transform duration-500 group-hover:scale-[1.04]"
+            className="h-full w-full"
           />
           <span className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink-900/20 to-transparent" />
-          <Badge tone="pink" className="absolute left-2.5 top-2.5 bg-white/90 backdrop-blur">
+          <Badge tone="pink" className="absolute left-2.5 top-2.5 bg-white/95">
             {recipe.category}
           </Badge>
         </Link>

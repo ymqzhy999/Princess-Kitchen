@@ -27,7 +27,7 @@ export function BottomNav() {
       <nav
         aria-label="底部导航"
         className={cn(
-          'pointer-events-auto mx-auto flex w-full max-w-[760px] items-stretch border-t border-white/80 bg-white/85 px-1.5 pt-1.5 shadow-[0_-8px_30px_-18px_rgba(163,45,83,0.35)] backdrop-blur-xl',
+          'pointer-events-auto mx-auto flex w-full max-w-[760px] items-stretch border-t border-white/80 bg-white/97 px-1.5 pt-1.5 shadow-[0_-8px_30px_-18px_rgba(163,45,83,0.35)]',
           'sm:mb-5 sm:max-w-[560px] sm:rounded-full sm:border sm:border-white/80 sm:px-3 sm:shadow-float',
         )}
       >

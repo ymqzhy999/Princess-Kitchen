@@ -135,6 +135,7 @@ export function OrderPage() {
                     <RecipeImage
                       recipe={recipe}
                       compact
+                      size="thumb"
                       className="h-full w-full"
                     />
                   </Link>

@@ -1,7 +1,7 @@
 # 项目总结 · Princess Kitchen
 
 > 公主的私房小厨房，送给戴诗佳女士。  
-> 当前版本：**1.4.0**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
+> 当前版本：**1.4.1**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
 
 ## 1. 项目定位
 
@@ -11,7 +11,7 @@
 
 - **54 道菜谱**：20 道原创 + 34 道 HowToCook 导入
 - **13 个分类**：家常菜、川菜、粤菜、湘菜、火锅、烧烤、早餐、主食、甜品、饮品、西餐、日料、其他
-- **54 张菜品图**：全部由 Agnes AI 生成（非实拍，见 `CREDITS.md`）
+- **54 张菜品图**：全部由 Agnes AI 生成（非实拍，见 `CREDITS.md`）；卡片用 480px 缩略图（`images/recipes/thumbs/`），详情页用原图
 - **0 道缺图**：54 道全部有图，卡片不再出现「实拍图待补充」
 - **0 张 SVG 菜品图**
 - **21 个自动化测试全部通过**

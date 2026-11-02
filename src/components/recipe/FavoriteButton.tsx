@@ -27,7 +27,7 @@ export function FavoriteButton({
       aria-pressed={active}
       aria-label={label ?? (active ? '取消收藏' : '收藏这道菜')}
       className={cn(
-        'flex items-center justify-center rounded-full border border-white/70 backdrop-blur-md transition-all duration-200',
+        'flex items-center justify-center rounded-full border border-white/70 transition-colors duration-200',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-theme/40',
         'active:scale-90',
         size === 'sm' ? 'h-8 w-8' : 'h-10 w-10',

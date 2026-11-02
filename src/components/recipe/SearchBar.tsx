@@ -28,7 +28,7 @@ export function SearchBar({
         placeholder={placeholder}
         aria-label={ariaLabel}
         enterKeyHint="search"
-        className="h-12 w-full appearance-none rounded-full border border-white/90 bg-white/85 pl-11 pr-11 text-base text-ink-800 shadow-soft outline-none backdrop-blur transition-colors placeholder:text-ink-400 focus:border-theme/50 focus:ring-2 focus:ring-theme/20 [&::-webkit-search-cancel-button]:hidden"
+        className="h-12 w-full appearance-none rounded-full border border-white/90 bg-white/95 pl-11 pr-11 text-base text-ink-800 shadow-soft outline-none transition-colors placeholder:text-ink-400 focus:border-theme/50 focus:ring-2 focus:ring-theme/20 [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
         <button

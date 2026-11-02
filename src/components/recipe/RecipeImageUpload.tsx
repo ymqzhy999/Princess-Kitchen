@@ -92,7 +92,7 @@ export function RecipeImageUpload({
           onClick={handleReset}
           aria-label={`恢复 ${recipe.name} 的默认图片`}
           title="恢复默认图片"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-white/90 text-ink-500 shadow-soft backdrop-blur transition-colors hover:bg-white hover:text-ink-800 active:scale-95"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-white/95 text-ink-500 shadow-soft transition-colors hover:bg-white hover:text-ink-800 active:scale-95"
         >
           <RotateCcw className="h-3.5 w-3.5" />
         </button>
@@ -105,7 +105,7 @@ export function RecipeImageUpload({
         aria-label={`从相册${hasCustom ? '更换' : '上传'} ${recipe.name} 的图片`}
         title="从相册上传"
         className={cn(
-          'flex items-center justify-center gap-1.5 border border-white/60 bg-white/92 font-medium text-ink-600 shadow-soft backdrop-blur transition-colors hover:bg-white hover:text-theme-deep active:scale-95 disabled:opacity-60',
+          'flex items-center justify-center gap-1.5 border border-white/60 bg-white/95 font-medium text-ink-600 shadow-soft transition-colors hover:bg-white hover:text-theme-deep active:scale-95 disabled:opacity-60',
           variant === 'icon'
             ? 'h-8 w-8 rounded-full'
             : 'h-9 rounded-full px-3 text-[10px]',

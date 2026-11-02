@@ -343,6 +343,7 @@ export function HomePage() {
               <RecipeImage
                 recipe={recipe}
                 compact
+                size="thumb"
                 className="h-12 w-12 shrink-0 rounded-2xl"
               />
               <div className="min-w-0 flex-1">

@@ -185,3 +185,16 @@
     transform: translateY(-5px) rotate(2deg);
   }
 }
+
+/* 列表卡片：跳过屏幕外卡片的布局与绘制，滚动更稳（尤其低端机） */
+.pk-scroll-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* 触屏设备不保留 hover 的位移/阴影动画，避免粘滞 hover 反复重绘 */
+@media (hover: none) {
+  .pk-scroll-card:hover {
+    box-shadow: none;
+  }
+}
