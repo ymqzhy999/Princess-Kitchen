@@ -387,6 +387,28 @@ npx cap open android
 
 ---
 
+## 9.5 Android App（Capacitor）
+
+项目里已经带了一个 Capacitor 壳，可以把网页直接打成 APK：
+
+- 配置：`capacitor.config.ts`（appId `com.ymq.princesskitchen`，应用名「公主厨房」，`webDir: dist`）
+- 图标：`scripts/agnes-icon.mjs` 用 Agnes 生成 1024 图标并导出多尺寸；`scripts/android-assets.mjs` 把它铺进 `android/.../res`（含自适应图标与启动图）
+- 出包：`.github/workflows/android.yml`，push 到 main 或手动触发 → `assembleDebug` → 产物同时作为 Actions artifact 和 Release 附件（tag `android-v<版本>`）
+
+下载安装（手机浏览器）：
+
+```
+https://github.com/ymqzhy999/Princess-Kitchen/releases/latest
+```
+
+装完就是独立 App，内容是离线内置的（不联网也能用菜谱）；网页版更新后需要重新出包。想在本机出包需要 JDK 21 + Android SDK：
+
+```bash
+pnpm build && npx cap sync android && cd android && ./gradlew assembleDebug
+```
+
+版本号跟随 `package.json`（`versionName` = version，`versionCode` = major*10000+minor*100+patch）。
+
 ## 10. 已知限制（当前版本）
 
 - 没有后端、账号、双人同步，换设备数据不会跟随；

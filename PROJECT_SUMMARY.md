@@ -16,6 +16,8 @@
 - **0 张 SVG 菜品图**
 - **21 个自动化测试全部通过**
 - **补图工装**：`scripts/agnes-image.mjs` + `scripts/agnes-prompts.json`（Agnes 生图、PNG→JPEG、写回 coverImage）
+- **Android App**：Capacitor 壳 + `android/` 工程 + CI 自动出 debug APK（Release `android-v1.4.0`）
+- **应用图标**：Agnes 生成（`public/icons/`，含 48–1024 多尺寸），同时用于 PWA 与 Android
 - **GitHub Pages Actions 自动部署已配置**（见 `DEPLOY_PAGES.md`）
 - 没有后端、登录、真实支付；数据只在本机
 
