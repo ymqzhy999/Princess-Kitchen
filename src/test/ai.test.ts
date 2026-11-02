@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { extractJson, normalizeDraft } from '../lib/ai';
+import { extractJson, normalizeDraft, normalizeKey, resolveImageKey } from '../lib/ai';
 import {
   getAllRecipes,
   getRecipeById,
@@ -89,6 +89,9 @@ describe('AI 设置与自定义菜谱存储', () => {
     expect(parseAiSettings(null).textProvider).toBe('deepseek');
     expect(parseAiSettings({ textProvider: 'agnes', textApiKey: 'sk-1' }).textProvider).toBe('agnes');
     expect(parseAiSettings({ imageModel: '' }).imageModel).toBe('agnes-image-2.1-flash');
+    expect(parseAiSettings({ imageBaseUrl: 'https://my-proxy.com//' }).imageBaseUrl).toBe(
+      'https://my-proxy.com',
+    );
   });
 
   it('丢弃形状不对的自定义菜谱', () => {
@@ -108,5 +111,28 @@ describe('AI 设置与自定义菜谱存储', () => {
     expect(getAllRecipes()).toHaveLength(55);
     expect(getRecipeById('custom_test1')?.name).toBe('番茄牛腩煲');
     expect(searchRecipes('牛腩').map((recipe) => recipe.name)).toContain('番茄牛腩煲');
+  });
+});
+
+describe('生图 Key 的取用规则', () => {
+  const base = parseAiSettings(null);
+
+  it('去掉粘贴带进来的空格和换行', () => {
+    expect(normalizeKey(' sk-abc\n ')).toBe('sk-abc');
+  });
+
+  it('生图 Key 优先', () => {
+    const settings = { ...base, imageApiKey: 'sk-image', textApiKey: 'sk-text' };
+    expect(resolveImageKey(settings)).toEqual({ key: 'sk-image', from: 'image' });
+  });
+
+  it('文本用 DeepSeek 时不复用它的 Key（否则 Agnes 会 401）', () => {
+    const settings = { ...base, textProvider: 'deepseek' as const, textApiKey: 'sk-deepseek' };
+    expect(resolveImageKey(settings)).toEqual({ key: '', from: 'none' });
+  });
+
+  it('文本也用 Agnes 时才复用文本 Key', () => {
+    const settings = { ...base, textProvider: 'agnes' as const, textApiKey: 'sk-agnes' };
+    expect(resolveImageKey(settings)).toEqual({ key: 'sk-agnes', from: 'text' });
   });
 });

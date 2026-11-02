@@ -9,6 +9,8 @@ export interface AiSettings {
   textModel: string;
   imageApiKey: string;
   imageModel: string;
+  /** 生图接口地址，默认 Agnes 官方网关；可改成自己的中转 */
+  imageBaseUrl: string;
 }
 
 export const DEFAULT_AI_SETTINGS: AiSettings = {
@@ -17,6 +19,7 @@ export const DEFAULT_AI_SETTINGS: AiSettings = {
   textModel: '',
   imageApiKey: '',
   imageModel: 'agnes-image-2.1-flash',
+  imageBaseUrl: 'https://apihub.agnes-ai.com',
 };
 
 /** AI 生成的菜谱草稿：保存前给用户确认，字段与 Recipe 对齐 */

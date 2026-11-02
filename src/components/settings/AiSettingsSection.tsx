@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Eye, EyeOff, KeyRound, Loader2, PlugZap, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, ImageIcon, KeyRound, Loader2, PlugZap, Sparkles } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { SectionHeader } from '../ui/SectionHeader';
 import { useAppStore } from '../../store/AppStore';
 import { useToast } from '../ui/Toast';
-import { AiError, TEXT_PROVIDERS, testTextConnection } from '../../lib/ai';
+import { AiError, TEXT_PROVIDERS, testImageConnection, testTextConnection } from '../../lib/ai';
 import type { AiTextProvider } from '../../types/ai';
 import { cn } from '../../lib/cn';
 
@@ -24,6 +24,19 @@ export function AiSettingsSection() {
   const { showToast } = useToast();
   const [showKey, setShowKey] = useState(false);
   const [testing, setTesting] = useState(false);
+  const [testingImage, setTestingImage] = useState(false);
+
+  const handleTestImage = async () => {
+    setTestingImage(true);
+    try {
+      showToast(await testImageConnection(aiSettings));
+    } catch (error) {
+      const err = error instanceof AiError ? error : new AiError('生图连接失败');
+      showToast(err.hint ? `${err.message}：${err.hint}` : err.message);
+    } finally {
+      setTestingImage(false);
+    }
+  };
 
   const handleTest = async () => {
     setTesting(true);
@@ -118,7 +131,7 @@ export function AiSettingsSection() {
       <div className="my-3 border-t border-dashed border-blush-100" />
 
       <label htmlFor="ai-image-key" className="pk-label block">
-        生图 Key（Agnes，留空则复用上面的 Key）
+        生图 Key（Agnes，与 DeepSeek 不通用）
       </label>
       <input
         id="ai-image-key"
@@ -140,7 +153,35 @@ export function AiSettingsSection() {
         className="pk-input mt-2 h-10 font-mono text-[12px]"
       />
 
-      <div className="mt-3 flex items-center gap-2">
+      <input
+        aria-label="生图接口地址"
+        value={aiSettings.imageBaseUrl}
+        onChange={(event) => updateAiSettings({ imageBaseUrl: event.target.value.trim() })}
+        placeholder="https://apihub.agnes-ai.com"
+        autoComplete="off"
+        spellCheck={false}
+        className="pk-input mt-2 h-10 font-mono text-[12px]"
+      />
+      <p className="mt-1 text-[10px] leading-relaxed text-ink-400">
+        上面是接口地址（默认 Agnes 官方网关），只有在用中转/自建代理时才需要改。
+      </p>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleTestImage}
+          disabled={testingImage}
+          leadingIcon={
+            testingImage ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <ImageIcon className="h-3.5 w-3.5" />
+            )
+          }
+        >
+          {testingImage ? '生图中…' : '测试生图'}
+        </Button>
         <Button
           variant="secondary"
           size="sm"

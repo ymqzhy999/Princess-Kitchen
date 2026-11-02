@@ -249,5 +249,7 @@ export function parseAiSettings(raw: unknown): AiSettings {
     textModel: asText(value.textModel, 60),
     imageApiKey: asText(value.imageApiKey, 200),
     imageModel: asText(value.imageModel, 60) || DEFAULT_AI_SETTINGS.imageModel,
+    imageBaseUrl:
+      asText(value.imageBaseUrl, 200).replace(/\/+$/, '') || DEFAULT_AI_SETTINGS.imageBaseUrl,
   };
 }

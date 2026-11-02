@@ -56,10 +56,13 @@ export class AiError extends Error {
   }
 }
 
-function friendlyHttpError(status: number, body: string): AiError {
+function friendlyHttpError(status: number, body: string, context = ''): AiError {
   const detail = body.slice(0, 200);
   if (status === 401 || status === 403) {
-    return new AiError('API Key 无效或没有权限', '去「我的厨房 → AI 助手」检查 Key 和模型名');
+    return new AiError(
+      'API Key 无效或没有权限',
+      context ? `${context}；Key 不通用：生图必须填 Agnes 的 Key` : '去「我的厨房 → AI 助手」检查 Key 和模型名',
+    );
   }
   if (status === 402 || status === 429) {
     return new AiError(status === 429 ? '请求太频繁，稍等一会儿再试' : '账户余额不足', detail);
@@ -82,7 +85,7 @@ function textConfig(settings: AiSettings): { url: string; model: string; key: st
   return {
     url: `${provider.baseUrl}${provider.chatPath}`,
     model: settings.textModel.trim() || provider.defaultModel,
-    key: settings.textApiKey.trim(),
+    key: normalizeKey(settings.textApiKey ?? ''),
   };
 }
 
@@ -90,8 +93,37 @@ export function hasTextKey(settings: AiSettings): boolean {
   return settings.textApiKey.trim().length > 0;
 }
 
+/** 去掉粘贴时混进来的空格、换行、零宽字符 */
+export function normalizeKey(raw: string): string {
+  return raw.replace(/[\s\u200b-\u200d\ufeff]/g, '');
+}
+
+/**
+ * 生图用哪个 Key：
+ * - 优先「生图 Key」；
+ * - 没填时只在文本模型也是 Agnes 的情况下复用文本 Key，
+ *   DeepSeek 的 Key 与 Agnes 不通用，绝不能混着用（这是 401 最常见的原因）。
+ */
+export function resolveImageKey(settings: AiSettings): {
+  key: string;
+  from: 'image' | 'text' | 'none';
+} {
+  const imageKey = normalizeKey(settings.imageApiKey ?? '');
+  if (imageKey) return { key: imageKey, from: 'image' };
+  if (settings.textProvider === 'agnes') {
+    const textKey = normalizeKey(settings.textApiKey ?? '');
+    if (textKey) return { key: textKey, from: 'text' };
+  }
+  return { key: '', from: 'none' };
+}
+
 export function hasImageKey(settings: AiSettings): boolean {
-  return (settings.imageApiKey || settings.textApiKey).trim().length > 0;
+  return resolveImageKey(settings).from !== 'none';
+}
+
+export function imageEndpoint(settings: AiSettings): string {
+  const base = (settings.imageBaseUrl || IMAGE_API.baseUrl).trim().replace(/\/+$/, '');
+  return `${base}${IMAGE_API.path}`;
 }
 
 const SYSTEM_PROMPT = `你是「公主厨房」的菜谱编辑，只输出 JSON，不要解释、不要 markdown 代码块。
@@ -278,15 +310,19 @@ export async function generateDishImage(
   settings: AiSettings,
   signal?: AbortSignal,
 ): Promise<string> {
-  const key = (settings.imageApiKey || settings.textApiKey).trim();
+  const { key } = resolveImageKey(settings);
   if (!key) {
-    throw new AiError('还没有填生图模型的 API Key', '去「我的厨房 → AI 助手」填 Agnes 的 Key');
+    throw new AiError(
+      '还没有填生图 Key',
+      '生图要用 Agnes 的 Key，和 DeepSeek 的不通用；去「我的厨房 → AI 助手」单独填一个',
+    );
   }
   const model = settings.imageModel.trim() || IMAGE_API.defaultModel;
+  const endpoint = imageEndpoint(settings);
 
   let response: Response;
   try {
-    response = await fetch(`${IMAGE_API.baseUrl}${IMAGE_API.path}`, {
+    response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
       body: JSON.stringify({
@@ -303,7 +339,13 @@ export async function generateDishImage(
   }
 
   const text = await response.text();
-  if (!response.ok) throw friendlyHttpError(response.status, text);
+  if (!response.ok) {
+    throw friendlyHttpError(
+      response.status,
+      text,
+      `生图接口 ${endpoint}（模型 ${model}）返回 ${response.status}`,
+    );
+  }
 
   let item: { url?: string; b64_json?: string } | undefined;
   try {
@@ -354,4 +396,40 @@ export async function testTextConnection(settings: AiSettings): Promise<string> 
   const text = await response.text();
   if (!response.ok) throw friendlyHttpError(response.status, text);
   return `${TEXT_PROVIDERS[settings.textProvider].label} · ${model} 连接正常`;
+}
+
+/** 设置页用：用最小请求验证「生图 Key + 接口地址 + 模型名」是否可用 */
+export async function testImageConnection(settings: AiSettings): Promise<string> {
+  const { key, from } = resolveImageKey(settings);
+  if (!key) {
+    throw new AiError('还没有填生图 Key', 'Agnes 的 Key 与 DeepSeek 不通用，请单独填一个');
+  }
+  const model = settings.imageModel.trim() || IMAGE_API.defaultModel;
+  const endpoint = imageEndpoint(settings);
+  let response: Response;
+  try {
+    response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model,
+        prompt: 'a red apple on a white table, simple product photo',
+        size: '1K',
+        ratio: '1:1',
+        extra_body: { response_format: 'url' },
+      }),
+      signal: AbortSignal.timeout(180_000),
+    });
+  } catch (error) {
+    throw networkError(error);
+  }
+  const text = await response.text();
+  if (!response.ok) {
+    throw friendlyHttpError(response.status, text, `生图接口 ${endpoint}（模型 ${model}）返回 ${response.status}`);
+  }
+  const hasImage = /"url"|"b64_json"/.test(text);
+  if (!hasImage) {
+    throw new AiError('接口通了，但没返回图片', `${endpoint} 返回：${text.slice(0, 120)}`);
+  }
+  return `生图可用 · ${model}${from === 'text' ? '（复用文本 Key）' : ''}`;
 }
