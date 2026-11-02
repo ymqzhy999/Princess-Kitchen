@@ -1,6 +1,6 @@
 export const APP_NAME = 'Princess Kitchen';
 export const APP_NAME_CN = '公主的私房小厨房';
-export const APP_VERSION = '1.5.3';
+export const APP_VERSION = '1.5.4';
 export const APP_TAGLINE = '把喜欢的味道，做给最喜欢的人';
 
 export const REFERENCE_PROJECT = {

@@ -88,13 +88,31 @@ function friendlyHttpError(status: number, body: string, context = ''): AiError 
   return new AiError(`请求失败（${status}）`, detail);
 }
 
-function networkError(error: unknown): AiError {
+function networkError(error: unknown, timeoutMs?: number): AiError {
+  const name = (error as { name?: string } | null)?.name ?? '';
   const message = error instanceof Error ? error.message : String(error);
-  if (/abort/i.test(message)) return new AiError('已取消');
+  // 超时和「用户取消」是两种完全不同的情况，不能都显示成"已取消"
+  if (name === 'TimeoutError' || /timeout|timed out/i.test(message)) {
+    return new AiError(
+      timeoutMs ? `请求超时（等了 ${Math.round(timeoutMs / 1000)} 秒没响应）` : '请求超时',
+      '多半是网络：该服务域名在你那边访问不通，开代理或换个网络再试',
+    );
+  }
+  if (name === 'AbortError' || /aborted/i.test(message)) {
+    return new AiError('请求被中断', '是不是切到后台了？回到页面再试一次');
+  }
   return new AiError(
     '网络请求失败',
-    '检查手机网络；如果开了代理，确认能访问对应服务商域名',
+    '检查手机网络；如果开了代理，确认能访问对应服务商域名（apihub.agnes-ai.com / api.deepseek.com）',
   );
+}
+
+/** 把调用方的取消 signal 和超时合并（老 WebView 没有 AbortSignal.any 时退回超时） */
+function withTimeout(signal: AbortSignal | undefined, ms: number): AbortSignal {
+  const timeout = AbortSignal.timeout(ms);
+  if (!signal) return timeout;
+  const anyFn = (AbortSignal as unknown as { any?: (signals: AbortSignal[]) => AbortSignal }).any;
+  return anyFn ? anyFn([signal, timeout]) : timeout;
 }
 
 function textConfig(settings: AiSettings): { url: string; model: string; key: string } {
@@ -295,10 +313,10 @@ export async function generateRecipeDraft(
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
       body: JSON.stringify(body),
-      signal,
+      signal: withTimeout(signal, 120_000),
     });
   } catch (error) {
-    throw networkError(error);
+    throw networkError(error, 120_000);
   }
 
   const text = await response.text();
@@ -357,10 +375,10 @@ export async function generateDishImage(
         return_base64: true,
         extra_body: { response_format: 'b64_json' },
       }),
-      signal,
+      signal: withTimeout(signal, 300_000),
     });
   } catch (error) {
-    throw networkError(error);
+    throw networkError(error, 300_000);
   }
 
   const text = await response.text();
@@ -416,10 +434,10 @@ export async function testTextConnection(settings: AiSettings): Promise<string> 
         messages: [{ role: 'user', content: '只回复 ok' }],
         max_tokens: 4,
       }),
-      signal: AbortSignal.timeout(30_000),
+      signal: AbortSignal.timeout(60_000),
     });
   } catch (error) {
-    throw networkError(error);
+    throw networkError(error, 60_000);
   }
   const text = await response.text();
   if (!response.ok) {
@@ -453,10 +471,10 @@ export async function testImageConnection(settings: AiSettings): Promise<string>
         return_base64: true,
         extra_body: { response_format: 'b64_json' },
       }),
-      signal: AbortSignal.timeout(180_000),
+      signal: AbortSignal.timeout(240_000),
     });
   } catch (error) {
-    throw networkError(error);
+    throw networkError(error, 240_000);
   }
   const text = await response.text();
   if (!response.ok) {

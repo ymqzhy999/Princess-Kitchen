@@ -2,7 +2,7 @@
 
 > 专属于两个人的美食菜谱与点菜小屋。  
 > 移动端优先，粉粉的奶油甜品风，所有功能都可以真实点按使用。  
-> 当前版本 **1.5.3** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
+> 当前版本 **1.5.4** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
 
 这是当前网页版的完整实现：React + TypeScript + Vite + Tailwind CSS + React Router + Lucide Icons。结构化数据保存在浏览器 `localStorage`，用户上传的菜品图保存在 IndexedDB。没有后端、没有登录、没有真实支付，也不包含 Android 原生工程或 APK 配置。
 

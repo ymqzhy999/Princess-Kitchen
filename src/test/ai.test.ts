@@ -1,5 +1,13 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { TEXT_MODELS, extractJson, isKnownModel, normalizeDraft, normalizeKey, resolveImageKey } from '../lib/ai';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  TEXT_MODELS,
+  extractJson,
+  generateRecipeDraft,
+  isKnownModel,
+  normalizeDraft,
+  normalizeKey,
+  resolveImageKey,
+} from '../lib/ai';
 import {
   getAllRecipes,
   getRecipeById,
@@ -148,5 +156,29 @@ describe('文本模型名', () => {
   it('每个服务商都有默认模型', () => {
     expect(TEXT_MODELS.deepseek).toContain('deepseek-chat');
     expect(TEXT_MODELS.agnes.length).toBeGreaterThan(0);
+  });
+});
+
+describe('网络异常的中文提示', () => {
+  const settings = { ...parseAiSettings(null), textApiKey: 'sk-test' };
+
+  it('超时不会被说成「已取消」', async () => {
+    const timeout = Object.assign(new Error('The operation was aborted due to timeout'), {
+      name: 'TimeoutError',
+    });
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      throw timeout;
+    }));
+    await expect(generateRecipeDraft('糖醋排骨', settings)).rejects.toThrow(/超时/);
+    vi.unstubAllGlobals();
+  });
+
+  it('真正的中断才提示被中断', async () => {
+    const abort = Object.assign(new Error('The user aborted a request.'), { name: 'AbortError' });
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      throw abort;
+    }));
+    await expect(generateRecipeDraft('糖醋排骨', settings)).rejects.toThrow(/中断|取消/);
+    vi.unstubAllGlobals();
   });
 });
