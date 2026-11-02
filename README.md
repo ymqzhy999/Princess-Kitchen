@@ -92,7 +92,9 @@ princess-kitchen/
 ├── public/
 │   ├── favicon.svg
 │   ├── credits.html               # 图片来源与许可（应用内可打开）
-│   └── images/recipes/            # 54 张 JPG，全部 Agnes AI 生成（无 SVG）
+│   ├── images/recipes/            # 54 张 JPG，全部 Agnes AI 生成（无 SVG）
+│   ├── icons/                     # 应用图标多尺寸 PNG（Agnes 生成）+ manifest.webmanifest
+│   └── favicon.svg                # 粉色渐变心形图标
 ├── src/
 │   ├── App.tsx                    # 路由表
 │   ├── main.tsx                   # 入口：HashRouter + Provider
@@ -150,6 +152,7 @@ princess-kitchen/
 ├── scripts/
 │   ├── prepare-pages.mjs          # 生成 .nojekyll 与 404 重定向
 │   ├── agnes-image.mjs            # Agnes 生图 → PNG 转 JPEG → 写回 coverImage
+│   ├── agnes-icon.mjs             # Agnes 生成应用图标 → 多尺寸 PNG
 │   └── agnes-prompts.json         # 21 道菜的生成提示词与参数
 └── README.md
 ```

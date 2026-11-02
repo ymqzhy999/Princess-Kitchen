@@ -16,7 +16,8 @@ v1.2.0 及更早版本曾使用：HowToCook 仓库原图 14 张（Unlicense）�
 
 ## 其他
 
-- 图标：[Lucide](https://lucide.dev/)（ISC License）
+- 应用图标：Agnes AI 生成（2026-11，`scripts/agnes-icon.mjs`），多尺寸 PNG 在 `public/icons/`，同时用作 PWA / Android 图标；旧的 `favicon.svg` 为粉色渐变心形，保留作为首选图标。
+- 界面图标：[Lucide](https://lucide.dev/)（ISC License）
 - 字体：系统字体，不加载网络字体。
 - 用户从相册上传的菜品图仅保存在本机 IndexedDB，不上传到服务器，也不参与上面的来源说明。
 
