@@ -33,10 +33,12 @@ export function AddRecipePage() {
   const [stage, setStage] = useState('');
   const [draft, setDraft] = useState<RecipeDraft | null>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
   const [error, setError] = useState<{ message: string; hint?: string } | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const busy = status === 'text' || status === 'image';
+  const imageBusy = status === 'image';
   const keyReady = hasTextKey(aiSettings);
 
   const reset = useCallback(() => {
@@ -44,6 +46,7 @@ export function AddRecipePage() {
     abortRef.current = null;
     setDraft(null);
     setImageDataUrl(null);
+    setImageError(null);
     setError(null);
     setStatus('idle');
     setStage('');
@@ -64,10 +67,14 @@ export function AddRecipePage() {
       try {
         const url = await generateDishImage(next, aiSettings, controller.signal);
         setImageDataUrl(url);
-      } catch (imageError) {
-        // 配图失败不影响保存菜谱
-        const message = imageError instanceof AiError ? imageError.message : '配图生成失败';
-        showToast(`${message}，可以先保存文字版`);
+      } catch (error) {
+        // 配图失败不影响保存菜谱，但要把原因摆出来，方便重试
+        const message =
+          error instanceof AiError
+            ? `${error.message}${error.hint ? `：${error.hint}` : ''}`
+            : '配图生成失败';
+        setImageError(message);
+        showToast('配图没出来，可以先保存文字版，或点「重试配图」');
       }
       setStatus('done');
       setStage('');
@@ -80,6 +87,24 @@ export function AddRecipePage() {
       abortRef.current = null;
     }
   }, [aiSettings, busy, input, reset, showToast]);
+
+  const handleRetryImage = useCallback(async () => {
+    if (!draft || status === 'image') return;
+    setImageError(null);
+    setStatus('image');
+    try {
+      const url = await generateDishImage(draft, aiSettings);
+      setImageDataUrl(url);
+    } catch (error) {
+      const message =
+        error instanceof AiError
+          ? `${error.message}${error.hint ? `：${error.hint}` : ''}`
+          : '配图生成失败';
+      setImageError(message);
+    } finally {
+      setStatus('done');
+    }
+  }, [aiSettings, draft, status]);
 
   const handleSave = useCallback(async () => {
     if (!draft) return;
@@ -229,10 +254,25 @@ export function AddRecipePage() {
                       <span className="text-[11px]">正在画配图…</span>
                     </>
                   ) : (
-                    <>
-                      <ImagePlus className="h-6 w-6" />
-                      <span className="text-[11px]">没有配图，也能保存菜谱</span>
-                    </>
+                    <div className="px-5 text-center">
+                      <ImagePlus className="mx-auto h-6 w-6" />
+                      <p className="mt-1.5 text-[11px]">
+                        {imageError ? '配图没出来' : '没有配图，也能保存菜谱'}
+                      </p>
+                      {imageError && (
+                        <p className="mt-1 line-clamp-3 text-[10px] leading-relaxed text-ink-400">
+                          {imageError}
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        onClick={handleRetryImage}
+                        disabled={imageBusy}
+                        className="mt-2 rounded-full border border-blush-200 bg-white px-3 py-1 text-[10.5px] text-theme-deep disabled:opacity-50"
+                      >
+                        {imageBusy ? '生成中…' : '重试配图'}
+                      </button>
+                    </div>
                   )}
                 </div>
               )}

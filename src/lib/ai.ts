@@ -353,7 +353,9 @@ export async function generateDishImage(
         prompt: buildImagePrompt(draft),
         size: '1K',
         ratio: '4:3',
-        extra_body: { response_format: 'url' },
+        // 直接要 base64：返回的图片放在 CDN 上，浏览器再 fetch 会被跨域拦掉
+        return_base64: true,
+        extra_body: { response_format: 'b64_json' },
       }),
       signal,
     });
@@ -384,8 +386,11 @@ export async function generateDishImage(
   let imageResponse: Response;
   try {
     imageResponse = await fetch(item.url, { signal });
-  } catch (error) {
-    throw networkError(error);
+  } catch {
+    throw new AiError(
+      '图片生成成功，但浏览器下载不下来',
+      `返回的是外链（${new URL(item.url).host}），跨域被拦；已改用 base64 模式，请重试`,
+    );
   }
   if (!imageResponse.ok) throw new AiError(`下载生成的图片失败（${imageResponse.status}）`);
   const blob = await imageResponse.blob();
@@ -445,7 +450,8 @@ export async function testImageConnection(settings: AiSettings): Promise<string>
         prompt: 'a red apple on a white table, simple product photo',
         size: '1K',
         ratio: '1:1',
-        extra_body: { response_format: 'url' },
+        return_base64: true,
+        extra_body: { response_format: 'b64_json' },
       }),
       signal: AbortSignal.timeout(180_000),
     });
@@ -456,9 +462,18 @@ export async function testImageConnection(settings: AiSettings): Promise<string>
   if (!response.ok) {
     throw friendlyHttpError(response.status, text, `生图接口 ${endpoint}（模型 ${model}）返回 ${response.status}`);
   }
-  const hasImage = /"url"|"b64_json"/.test(text);
-  if (!hasImage) {
+  let item: { url?: string; b64_json?: string } | undefined;
+  try {
+    item = (JSON.parse(text) as { data?: { url?: string; b64_json?: string }[] }).data?.[0];
+  } catch {
+    throw new AiError('接口返回的不是 JSON', `${endpoint}：${text.slice(0, 120)}`);
+  }
+  const bytes = item?.b64_json ? item.b64_json.length : 0;
+  if (!item || (!bytes && !item.url)) {
     throw new AiError('接口通了，但没返回图片', `${endpoint} 返回：${text.slice(0, 120)}`);
+  }
+  if (item.b64_json && bytes < 2000) {
+    throw new AiError('返回的图片数据太小，可能是空图', `base64 长度 ${bytes}`);
   }
   return `生图可用 · ${model}${from === 'text' ? '（复用文本 Key）' : ''}`;
 }

@@ -56,7 +56,8 @@ describe('AI 加菜', () => {
           return jsonResponse({ choices: [{ message: { content: JSON.stringify(DRAFT) } }] });
         }
         if (url.includes('/images/generations')) {
-          return jsonResponse({ data: [{ url: 'https://example.com/dish.png' }] });
+          // 真实接口现在直接返回 base64，避免浏览器再去 CDN 下载被跨域拦
+          return jsonResponse({ data: [{ b64_json: `iVBORw0KGgo${'A'.repeat(4000)}` }] });
         }
         return new Response(new Blob([new Uint8Array([137, 80, 78, 71])], { type: 'image/png' }));
       }),

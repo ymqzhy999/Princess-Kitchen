@@ -60,10 +60,11 @@ export function AiSettingsSection() {
     <section className="pk-card p-4">
       <SectionHeader
         title="AI 助手"
-        subtitle="填一次 Key，之后就能「输入菜名 → 生成菜谱和配图」"
+        subtitle="写菜谱的文字模型、画配图的模型是两块，分开填"
         action={<Sparkles className="mb-1 h-4 w-4 text-blush-300" />}
       />
 
+      <p className="mb-1 text-[10.5px] font-medium text-ink-600">① 写菜谱用哪个</p>
       <div className="mb-1 flex gap-1.5 rounded-full bg-cream-100/80 p-1">
         {(Object.keys(TEXT_PROVIDERS) as AiTextProvider[]).map((provider) => (
           <button
@@ -165,7 +166,11 @@ export function AiSettingsSection() {
         {TEXT_PROVIDERS[aiSettings.textProvider].label} 可用：{modelList.join(' / ')}
       </p>
 
-      <div className="my-3 border-t border-dashed border-blush-100" />
+      <div className="mb-1 mt-4 border-t border-dashed border-blush-100 pt-3">
+        <p className="text-[10.5px] font-medium text-ink-600">
+          ② 生成配图（固定用 Agnes，和上面选谁无关）
+        </p>
+      </div>
 
       <label htmlFor="ai-image-key" className="pk-label block">
         生图 Key（Agnes，与 DeepSeek 不通用）
