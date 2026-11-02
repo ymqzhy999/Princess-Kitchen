@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { SectionHeader } from '../ui/SectionHeader';
 import { useAppStore } from '../../store/AppStore';
 import { useToast } from '../ui/Toast';
-import { AiError, TEXT_PROVIDERS, testImageConnection, testTextConnection } from '../../lib/ai';
+import { AiError, TEXT_MODELS, TEXT_PROVIDERS, testImageConnection, testTextConnection } from '../../lib/ai';
 import type { AiTextProvider } from '../../types/ai';
 import { cn } from '../../lib/cn';
 
@@ -23,6 +23,11 @@ export function AiSettingsSection() {
   const { aiSettings, updateAiSettings } = useAppStore();
   const { showToast } = useToast();
   const [showKey, setShowKey] = useState(false);
+  const [customModel, setCustomModel] = useState(false);
+  const modelList = TEXT_MODELS[aiSettings.textProvider];
+  const storedModel = aiSettings.textModel.trim();
+  // 旧版本可能存了一个不属于当前服务商的模型名（比如 deepseek-flash），这里显示为「自定义」方便改
+  const isCustomModel = customModel || (storedModel !== '' && !modelList.includes(storedModel));
   const [testing, setTesting] = useState(false);
   const [testingImage, setTestingImage] = useState(false);
 
@@ -64,7 +69,14 @@ export function AiSettingsSection() {
           <button
             key={provider}
             type="button"
-            onClick={() => updateAiSettings({ textProvider: provider })}
+            onClick={() =>
+              updateAiSettings({
+                textProvider: provider,
+                textModel: TEXT_MODELS[provider].includes(aiSettings.textModel.trim())
+                  ? aiSettings.textModel
+                  : '',
+              })
+            }
             aria-pressed={aiSettings.textProvider === provider}
             className={cn(
               'flex-1 rounded-full px-3 py-1.5 text-[11.5px] transition-colors',
@@ -118,15 +130,40 @@ export function AiSettingsSection() {
       <label htmlFor="ai-text-model" className="pk-label mt-3 block">
         文本模型
       </label>
-      <input
+      <select
         id="ai-text-model"
-        value={aiSettings.textModel}
-        onChange={(event) => updateAiSettings({ textModel: event.target.value })}
-        placeholder={TEXT_PROVIDERS[aiSettings.textProvider].defaultModel}
-        autoComplete="off"
-        spellCheck={false}
-        className="pk-input mt-1.5 h-10 font-mono text-[12px]"
-      />
+        value={isCustomModel ? '__custom' : storedModel || TEXT_PROVIDERS[aiSettings.textProvider].defaultModel}
+        onChange={(event) => {
+          if (event.target.value === '__custom') {
+            setCustomModel(true);
+            return;
+          }
+          setCustomModel(false);
+          updateAiSettings({ textModel: event.target.value });
+        }}
+        className="pk-input mt-1.5 h-11 text-[12.5px]"
+      >
+        {modelList.map((model) => (
+          <option key={model} value={model}>
+            {model}
+          </option>
+        ))}
+        <option value="__custom">自定义…</option>
+      </select>
+      {isCustomModel && (
+        <input
+          aria-label="自定义模型名"
+          value={aiSettings.textModel}
+          onChange={(event) => updateAiSettings({ textModel: event.target.value })}
+          placeholder={TEXT_PROVIDERS[aiSettings.textProvider].defaultModel}
+          autoComplete="off"
+          spellCheck={false}
+          className="pk-input mt-2 h-10 font-mono text-[12px]"
+        />
+      )}
+      <p className="mt-1 text-[10px] leading-relaxed text-ink-400">
+        {TEXT_PROVIDERS[aiSettings.textProvider].label} 可用：{modelList.join(' / ')}
+      </p>
 
       <div className="my-3 border-t border-dashed border-blush-100" />
 

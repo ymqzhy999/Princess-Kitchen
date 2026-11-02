@@ -36,6 +36,17 @@ export const TEXT_PROVIDERS: Record<AiTextProvider, ProviderConfig> = {
   },
 };
 
+/** 各服务商真实存在的文本模型（下拉选，避免手打死名） */
+export const TEXT_MODELS: Record<AiTextProvider, string[]> = {
+  deepseek: ['deepseek-chat', 'deepseek-reasoner'],
+  agnes: ['agnes-2.5-flash', 'agnes-2.5-pro-alpha', 'agnes-2.5-pro-beta', 'agnes-3.0-flash'],
+};
+
+/** 当前模型是否属于该服务商（用来在切换服务商时自动纠正） */
+export function isKnownModel(provider: AiTextProvider, model: string): boolean {
+  return TEXT_MODELS[provider].includes(model.trim());
+}
+
 export const IMAGE_API = {
   baseUrl: 'https://apihub.agnes-ai.com',
   path: '/v1/images/generations',
@@ -66,6 +77,12 @@ function friendlyHttpError(status: number, body: string, context = ''): AiError 
   }
   if (status === 402 || status === 429) {
     return new AiError(status === 429 ? '请求太频繁，稍等一会儿再试' : '账户余额不足', detail);
+  }
+  if (status === 400 || status === 404 || status === 422) {
+    return new AiError(
+      `请求被拒绝（${status}）：模型名或参数不对`,
+      context || '检查模型名：DeepSeek 用 deepseek-chat，Agnes 用 agnes-2.5-flash',
+    );
   }
   if (status >= 500) return new AiError(`服务商暂时出错（${status}）`, '过一会儿再试一次');
   return new AiError(`请求失败（${status}）`, detail);
@@ -285,7 +302,13 @@ export async function generateRecipeDraft(
   }
 
   const text = await response.text();
-  if (!response.ok) throw friendlyHttpError(response.status, text);
+  if (!response.ok) {
+    throw friendlyHttpError(
+      response.status,
+      text,
+      `模型 ${model} @ ${url} 返回 ${response.status}；可用模型：${TEXT_MODELS[settings.textProvider].join(' / ')}`,
+    );
+  }
 
   let content = '';
   try {
@@ -394,7 +417,13 @@ export async function testTextConnection(settings: AiSettings): Promise<string> 
     throw networkError(error);
   }
   const text = await response.text();
-  if (!response.ok) throw friendlyHttpError(response.status, text);
+  if (!response.ok) {
+    throw friendlyHttpError(
+      response.status,
+      text,
+      `模型 ${model} @ ${url} 返回 ${response.status}；可用模型：${TEXT_MODELS[settings.textProvider].join(' / ')}`,
+    );
+  }
   return `${TEXT_PROVIDERS[settings.textProvider].label} · ${model} 连接正常`;
 }
 

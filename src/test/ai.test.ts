@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { extractJson, normalizeDraft, normalizeKey, resolveImageKey } from '../lib/ai';
+import { TEXT_MODELS, extractJson, isKnownModel, normalizeDraft, normalizeKey, resolveImageKey } from '../lib/ai';
 import {
   getAllRecipes,
   getRecipeById,
@@ -134,5 +134,19 @@ describe('生图 Key 的取用规则', () => {
   it('文本也用 Agnes 时才复用文本 Key', () => {
     const settings = { ...base, textProvider: 'agnes' as const, textApiKey: 'sk-agnes' };
     expect(resolveImageKey(settings)).toEqual({ key: 'sk-agnes', from: 'text' });
+  });
+});
+
+describe('文本模型名', () => {
+  it('只接受服务商真实存在的模型', () => {
+    expect(isKnownModel('deepseek', 'deepseek-chat')).toBe(true);
+    expect(isKnownModel('deepseek', 'deepseek-flash')).toBe(false);
+    expect(isKnownModel('agnes', 'agnes-2.5-flash')).toBe(true);
+    expect(isKnownModel('agnes', 'deepseek-chat')).toBe(false);
+  });
+
+  it('每个服务商都有默认模型', () => {
+    expect(TEXT_MODELS.deepseek).toContain('deepseek-chat');
+    expect(TEXT_MODELS.agnes.length).toBeGreaterThan(0);
   });
 });
