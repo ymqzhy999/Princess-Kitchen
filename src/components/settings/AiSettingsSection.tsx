@@ -4,7 +4,14 @@ import { Button } from '../ui/Button';
 import { SectionHeader } from '../ui/SectionHeader';
 import { useAppStore } from '../../store/AppStore';
 import { useToast } from '../ui/Toast';
-import { AiError, TEXT_MODELS, TEXT_PROVIDERS, testImageConnection, testTextConnection } from '../../lib/ai';
+import {
+  AiError,
+  TEXT_MODELS,
+  TEXT_PROVIDERS,
+  checkAgnesNetwork,
+  testImageConnection,
+  testTextConnection,
+} from '../../lib/ai';
 import type { AiTextProvider } from '../../types/ai';
 import { cn } from '../../lib/cn';
 
@@ -30,6 +37,19 @@ export function AiSettingsSection() {
   const isCustomModel = customModel || (storedModel !== '' && !modelList.includes(storedModel));
   const [testing, setTesting] = useState(false);
   const [testingImage, setTestingImage] = useState(false);
+  const [checkingNet, setCheckingNet] = useState(false);
+
+  const handleCheckNetwork = async () => {
+    setCheckingNet(true);
+    try {
+      showToast(await checkAgnesNetwork(aiSettings));
+    } catch (error) {
+      const err = error instanceof AiError ? error : new AiError('网络自检失败');
+      showToast(err.hint ? `${err.message}｜${err.hint}` : err.message);
+    } finally {
+      setCheckingNet(false);
+    }
+  };
 
   const handleTestImage = async () => {
     setTestingImage(true);
@@ -223,6 +243,9 @@ export function AiSettingsSection() {
           }
         >
           {testingImage ? '生图中…' : '测试生图'}
+        </Button>
+        <Button variant="secondary" size="sm" onClick={handleCheckNetwork} disabled={checkingNet}>
+          {checkingNet ? '检测中…' : '网络自检'}
         </Button>
         <Button
           variant="secondary"

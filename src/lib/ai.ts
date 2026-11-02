@@ -88,22 +88,24 @@ function friendlyHttpError(status: number, body: string, context = ''): AiError 
   return new AiError(`请求失败（${status}）`, detail);
 }
 
-function networkError(error: unknown, timeoutMs?: number): AiError {
+function networkError(error: unknown, timeoutMs?: number, startedAt = 0): AiError {
   const name = (error as { name?: string } | null)?.name ?? '';
   const message = error instanceof Error ? error.message : String(error);
+  const elapsed = startedAt ? `（${((Date.now() - startedAt) / 1000).toFixed(1)}s）` : '';
   // 超时和「用户取消」是两种完全不同的情况，不能都显示成"已取消"
   if (name === 'TimeoutError' || /timeout|timed out/i.test(message)) {
     return new AiError(
-      timeoutMs ? `请求超时（等了 ${Math.round(timeoutMs / 1000)} 秒没响应）` : '请求超时',
+      `${timeoutMs ? `请求超时（上限 ${Math.round(timeoutMs / 1000)}s）` : '请求超时'}${elapsed}` +
+        (name ? `｜${name}` : ''),
       '多半是网络：该服务域名在你那边访问不通，开代理或换个网络再试',
     );
   }
   if (name === 'AbortError' || /aborted/i.test(message)) {
-    return new AiError('请求被中断', '是不是切到后台了？回到页面再试一次');
+    return new AiError(`请求被中断${elapsed}`, `错误类型 ${name || 'AbortError'}；如果是切到后台导致的，回到页面重试`);
   }
   return new AiError(
-    '网络请求失败',
-    '检查手机网络；如果开了代理，确认能访问对应服务商域名（apihub.agnes-ai.com / api.deepseek.com）',
+    `网络请求失败${elapsed}`,
+    `错误类型 ${name || 'TypeError'}：${message.slice(0, 60)}；多半是这个域名在你这台机器上访问不通`,
   );
 }
 
@@ -361,63 +363,77 @@ export async function generateDishImage(
   const model = settings.imageModel.trim() || IMAGE_API.defaultModel;
   const endpoint = imageEndpoint(settings);
 
-  let response: Response;
-  try {
-    response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({
-        model,
-        prompt: buildImagePrompt(draft),
-        size: '1K',
-        ratio: '4:3',
-        // 直接要 base64：返回的图片放在 CDN 上，浏览器再 fetch 会被跨域拦掉
-        return_base64: true,
-        extra_body: { response_format: 'b64_json' },
-      }),
-      signal: withTimeout(signal, 300_000),
+  /** b64 模式：图片随响应回来，不用再下载；url 模式：响应小，弱网更稳但要多下一次图 */
+  const attempt = async (mode: 'b64' | 'url'): Promise<string> => {
+    const startedAt = Date.now();
+    const body: Record<string, unknown> = {
+      model,
+      prompt: buildImagePrompt(draft),
+      size: '1K',
+      ratio: '4:3',
+      extra_body: { response_format: mode === 'b64' ? 'b64_json' : 'url' },
+    };
+    if (mode === 'b64') body.return_base64 = true;
+
+    let response: Response;
+    try {
+      response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+        body: JSON.stringify(body),
+        signal: withTimeout(signal, mode === 'b64' ? 180_000 : 120_000),
+      });
+    } catch (error) {
+      throw networkError(error, mode === 'b64' ? 180_000 : 120_000, startedAt);
+    }
+
+    const text = await response.text();
+    if (!response.ok) {
+      throw friendlyHttpError(
+        response.status,
+        text,
+        `生图接口 ${endpoint}（模型 ${model}）返回 ${response.status}`,
+      );
+    }
+
+    let item: { url?: string; b64_json?: string } | undefined;
+    try {
+      item = (JSON.parse(text) as { data?: { url?: string; b64_json?: string }[] }).data?.[0];
+    } catch {
+      throw new AiError('生图接口返回格式看不懂', text.slice(0, 160));
+    }
+    if (!item) throw new AiError('生图接口没有返回图片', '再试一次');
+    if (item.b64_json) return `data:image/png;base64,${item.b64_json}`;
+    if (!item.url) throw new AiError('生图接口没有返回图片地址', '再试一次');
+
+    let imageResponse: Response;
+    try {
+      imageResponse = await fetch(item.url, { signal: withTimeout(signal, 60_000) });
+    } catch (error) {
+      throw new AiError(
+        '图片生成成功，但下载不下来',
+        `图存在 ${new URL(item.url).host}，下载失败：${error instanceof Error ? error.message : '跨域或网络问题'}`,
+      );
+    }
+    if (!imageResponse.ok) throw new AiError(`下载生成的图片失败（${imageResponse.status}）`);
+    const blob = await imageResponse.blob();
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = () => reject(new AiError('图片读取失败'));
+      reader.readAsDataURL(blob);
     });
+  };
+
+  try {
+    return await attempt('b64');
   } catch (error) {
-    throw networkError(error, 300_000);
+    // 弱网/大响应容易把 base64 那条路走挂，自动换 url 模式再试一次
+    const retryable =
+      error instanceof AiError && /超时|网络|中断|下载/.test(error.message);
+    if (retryable) return await attempt('url');
+    throw error;
   }
-
-  const text = await response.text();
-  if (!response.ok) {
-    throw friendlyHttpError(
-      response.status,
-      text,
-      `生图接口 ${endpoint}（模型 ${model}）返回 ${response.status}`,
-    );
-  }
-
-  let item: { url?: string; b64_json?: string } | undefined;
-  try {
-    item = (JSON.parse(text) as { data?: { url?: string; b64_json?: string }[] }).data?.[0];
-  } catch {
-    throw new AiError('生图接口返回格式看不懂', text.slice(0, 160));
-  }
-  if (!item) throw new AiError('生图接口没有返回图片', '再试一次');
-
-  if (item.b64_json) return `data:image/png;base64,${item.b64_json}`;
-  if (!item.url) throw new AiError('生图接口没有返回图片地址', '再试一次');
-
-  let imageResponse: Response;
-  try {
-    imageResponse = await fetch(item.url, { signal });
-  } catch {
-    throw new AiError(
-      '图片生成成功，但浏览器下载不下来',
-      `返回的是外链（${new URL(item.url).host}），跨域被拦；已改用 base64 模式，请重试`,
-    );
-  }
-  if (!imageResponse.ok) throw new AiError(`下载生成的图片失败（${imageResponse.status}）`);
-  const blob = await imageResponse.blob();
-  return await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new AiError('图片读取失败'));
-    reader.readAsDataURL(blob);
-  });
 }
 
 /** 设置页用：发一句 ping 验证 Key / 模型名是否可用 */
@@ -494,4 +510,26 @@ export async function testImageConnection(settings: AiSettings): Promise<string>
     throw new AiError('返回的图片数据太小，可能是空图', `base64 长度 ${bytes}`);
   }
   return `生图可用 · ${model}${from === 'text' ? '（复用文本 Key）' : ''}`;
+}
+
+/** 设置页用：只探连通性（拉模型列表，响应很小），用来区分「连不上」和「生成慢」 */
+export async function checkAgnesNetwork(settings: AiSettings): Promise<string> {
+  const base = (settings.imageBaseUrl || IMAGE_API.baseUrl).trim().replace(/\/+$/, '');
+  const key = resolveImageKey(settings).key;
+  const startedAt = Date.now();
+  let response: Response;
+  try {
+    response = await fetch(`${base}/v1/models`, {
+      method: 'GET',
+      headers: key ? { Authorization: `Bearer ${key}` } : undefined,
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (error) {
+    throw networkError(error, 15_000, startedAt);
+  }
+  const ms = Date.now() - startedAt;
+  if (!response.ok) {
+    throw friendlyHttpError(response.status, await response.text(), `${base}/v1/models 返回 ${response.status}`);
+  }
+  return `网络正常 · ${base} 响应 ${ms}ms`;
 }

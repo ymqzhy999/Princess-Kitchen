@@ -1,7 +1,7 @@
 # 项目总结 · Princess Kitchen
 
 > 公主的私房小厨房，送给戴诗佳女士。  
-> 当前版本：**1.5.4**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
+> 当前版本：**1.5.5**（React + TypeScript + Vite + Tailwind + React Router + Lucide）
 
 ## 1. 项目定位
 
