@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def pkg = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+def versionParts = pkg.version.tokenize('.').collect { it.toInteger() }
+def computedCode = versionParts[0] * 10000 + versionParts[1] * 100 + (versionParts.size() > 2 ? versionParts[2] : 0)
+
 android {
     namespace = "com.ymq.princesskitchen"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,8 +11,8 @@ android {
         applicationId "com.ymq.princesskitchen"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode computedCode
+        versionName pkg.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
