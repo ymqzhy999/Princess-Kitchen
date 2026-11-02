@@ -14,13 +14,14 @@ import {
   UserRound,
 } from 'lucide-react';
 import { AVATAR_PRESETS, DEFAULT_SETTINGS, THEME_OPTIONS, type ThemeName } from '../types';
-import { RECIPES } from '../data/recipes';
+import { getAllRecipes } from '../data/recipes';
 import { useAppStore } from '../store/AppStore';
 import { useToast } from '../components/ui/Toast';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Button } from '../components/ui/Button';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { AiSettingsSection } from '../components/settings/AiSettingsSection';
 import { Avatar } from '../components/ui/Avatar';
 import { IMAGE_ACCEPT, compressImageFile } from '../lib/image';
 import { formatFileSize } from '../lib/format';
@@ -297,6 +298,8 @@ export function SettingsPage() {
         </Button>
       </section>
 
+      <AiSettingsSection />
+
       <section className="pk-card p-4">
         <SectionHeader
           title="关于"
@@ -310,7 +313,7 @@ export function SettingsPage() {
           </div>
           <div className="flex items-center justify-between gap-3">
             <span className="text-ink-500">菜谱</span>
-            <span className="text-ink-800">{RECIPES.length} 道 · 20 原创 + 34 授权导入</span>
+            <span className="text-ink-800">{getAllRecipes().length} 道 · 含 AI 生成</span>
           </div>
           <div className="flex items-center justify-between gap-3">
             <span className="text-ink-500">数据同步</span>

@@ -34,20 +34,41 @@ export const RECIPES: Recipe[] = [
   ...importedBreakfastRecipes,
 ];
 
-const RECIPE_MAP = new Map(RECIPES.map((recipe) => [recipe.id, recipe]));
+const BASE_MAP = new Map(RECIPES.map((recipe) => [recipe.id, recipe]));
+
+/* ------------------------------------------------------------------ */
+/* 用户用 AI 生成并保存的自定义菜谱（只在本机）                         */
+/* ------------------------------------------------------------------ */
+
+let runtimeCustom: Recipe[] = [];
+
+/** 由 AppStore 在启动/变更时调用，页面里的查询函数会自动带上自定义菜谱 */
+export function setRuntimeCustomRecipes(list: Recipe[]): void {
+  runtimeCustom = list;
+}
+
+export function getCustomRecipes(): Recipe[] {
+  return runtimeCustom;
+}
+
+/** 全量菜谱：自定义在前，静态在后 */
+export function getAllRecipes(): Recipe[] {
+  return runtimeCustom.length ? [...runtimeCustom, ...RECIPES] : RECIPES;
+}
 
 export function getRecipeById(id: string | undefined): Recipe | undefined {
   if (!id) return undefined;
-  return RECIPE_MAP.get(id);
+  return runtimeCustom.find((recipe) => recipe.id === id) ?? BASE_MAP.get(id);
 }
 
 export function getRecipesByCategory(category: RecipeCategory): Recipe[] {
-  return RECIPES.filter((recipe) => recipe.category === category);
+  return getAllRecipes().filter((recipe) => recipe.category === category);
 }
 
 export function getFeaturedRecipes(): Recipe[] {
-  const featured = RECIPES.filter((recipe) => recipe.featured);
-  return featured.length > 0 ? featured : RECIPES;
+  const pool = getAllRecipes();
+  const featured = pool.filter((recipe) => recipe.featured);
+  return featured.length > 0 ? featured : pool;
 }
 
 /** Deterministic pick so the same day always shows the same recommendation. */
@@ -57,7 +78,7 @@ export function getTodayRecommendation(date = new Date()): Recipe {
 }
 
 export function getPopularRecipes(limit = 5, excludeId?: string): Recipe[] {
-  return [...RECIPES]
+  return [...getAllRecipes()]
     .filter((recipe) => recipe.id !== excludeId && Boolean(recipe.coverImage))
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, limit);
@@ -65,9 +86,9 @@ export function getPopularRecipes(limit = 5, excludeId?: string): Recipe[] {
 
 export function searchRecipes(query: string): Recipe[] {
   const keyword = query.trim().toLowerCase();
-  if (!keyword) return RECIPES;
+  if (!keyword) return getAllRecipes();
 
-  return RECIPES.filter((recipe) => {
+  return getAllRecipes().filter((recipe) => {
     const haystack = [
       recipe.name,
       recipe.category,
@@ -82,7 +103,7 @@ export function searchRecipes(query: string): Recipe[] {
 }
 
 export function countByCategory(): Record<RecipeCategory, number> {
-  return RECIPES.reduce(
+  return getAllRecipes().reduce(
     (counts, recipe) => {
       counts[recipe.category] += 1;
       return counts;
@@ -108,5 +129,5 @@ export function countByCategory(): Record<RecipeCategory, number> {
 export function findRecipeByName(name: string): Recipe | undefined {
   const trimmed = name.trim();
   if (!trimmed) return undefined;
-  return RECIPES.find((recipe) => recipe.name === trimmed);
+  return getAllRecipes().find((recipe) => recipe.name === trimmed);
 }

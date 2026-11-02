@@ -2,7 +2,7 @@ import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { CalendarDays, Camera, Check, ImagePlus, X } from 'lucide-react';
 import type { DiaryDraft, DiaryEntry } from '../../types';
 import { IMAGE_ACCEPT, compressImageFile } from '../../lib/image';
-import { findRecipeByName, RECIPES } from '../../data/recipes';
+import { findRecipeByName, getAllRecipes } from '../../data/recipes';
 import { todayISO } from '../../lib/format';
 import { Button } from '../ui/Button';
 import { StarRating } from '../ui/StarRating';
@@ -97,7 +97,7 @@ export function DiaryForm({ initial, onSubmit, onCancel }: DiaryFormProps) {
           required
         />
         <datalist id="diary-dish-options">
-          {RECIPES.map((recipe) => (
+          {getAllRecipes().map((recipe) => (
             <option key={recipe.id} value={recipe.name} />
           ))}
         </datalist>

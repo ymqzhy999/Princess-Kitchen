@@ -10,6 +10,7 @@ import { DiaryPage } from './pages/DiaryPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { WheelPage } from './pages/WheelPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { AddRecipePage } from './pages/AddRecipePage';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
           <Route path="recipes" element={<RecipesPage />} />
+          <Route path="add" element={<AddRecipePage />} />
           <Route path="favorites" element={<FavoritesPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="diary" element={<DiaryPage />} />

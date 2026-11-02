@@ -2,7 +2,7 @@
 
 > 专属于两个人的美食菜谱与点菜小屋。  
 > 移动端优先，粉粉的奶油甜品风，所有功能都可以真实点按使用。  
-> 当前版本 **1.4.1** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
+> 当前版本 **1.5.0** · [项目总结](PROJECT_SUMMARY.md) · [上传 GitHub / 电脑开发](GITHUB_UPLOAD.md) · [Pages 部署](DEPLOY_PAGES.md)
 
 这是当前网页版的完整实现：React + TypeScript + Vite + Tailwind CSS + React Router + Lucide Icons。结构化数据保存在浏览器 `localStorage`，用户上传的菜品图保存在 IndexedDB。没有后端、没有登录、没有真实支付，也不包含 Android 原生工程或 APK 配置。
 
@@ -386,6 +386,16 @@ npx cap open android
 打包时建议额外验证：Android 状态栏颜色、软键盘顶起输入框、返回键与 Hash 路由、WebView 的 localStorage 持久性、相册权限。若需要可靠保存，优先把数据迁移到 Preferences 或 SQLite，并尽早做云端同步。
 
 ---
+
+## 9.4 AI 加菜（DeepSeek / Agnes）
+
+不用改代码就能加菜：菜谱页右上角 **「AI 加菜」** → 输入菜名或一句想吃的描述 → 生成菜谱 + 配图 → 看一眼，满意就「用这个，保存」。保存后自动出现在菜谱大全、收藏、今日菜单、转盘和日记里（只存本机）。
+
+- **Key 在 App 里填**：「我的厨房 → AI 助手」，可分别设文本模型（DeepSeek 或 Agnes）与生图（Agnes）；Key 只存这台设备的 localStorage，请求直连服务商，不经过任何中间服务器。
+- **文本模型**：默认 `deepseek-chat`，也可切 Agnes `agnes-2.5-flash`（OpenAI 兼容）。
+- **配图**：Agnes `agnes-image-2.1-flash`，1K / 4:3，生成后压成本地 dataURL 存 IndexedDB；配图失败不影响保存文字版。
+- **待核对**：AI 写的火候和时间不保证 100% 对，保存的菜谱 `source` 标为「AI 生成 · 请按自己口味核对」。
+- **代码位置**：`src/lib/ai.ts`（提示词、JSON 解析、错误提示）、`src/pages/AddRecipePage.tsx`（生成/预览/保存）、`src/components/settings/AiSettingsSection.tsx`（Key 设置）。
 
 ## 9.5 Android App（Capacitor）
 

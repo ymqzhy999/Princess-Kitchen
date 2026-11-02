@@ -14,6 +14,8 @@ export const STORAGE_KEYS = {
   order: `${STORAGE_PREFIX}order`,
   diary: `${STORAGE_PREFIX}diary`,
   recipeImages: `${STORAGE_PREFIX}recipeImages`,
+  customRecipes: `${STORAGE_PREFIX}customRecipes`,
+  aiSettings: `${STORAGE_PREFIX}aiSettings`,
 } as const;
 
 function canUseStorage(): boolean {

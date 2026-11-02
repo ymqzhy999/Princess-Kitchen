@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { ChefHat, Heart, Search, Sparkles } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ChefHat, Heart, Search, Sparkles, Wand2 } from 'lucide-react';
 import { RECIPE_CATEGORIES, type RecipeCategory } from '../types';
-import { RECIPES, countByCategory, searchRecipes } from '../data/recipes';
+import { countByCategory, getAllRecipes, searchRecipes } from '../data/recipes';
 import { useAppStore } from '../store/AppStore';
 import { useToast } from '../components/ui/Toast';
 import { SearchBar } from '../components/recipe/SearchBar';
@@ -21,6 +21,7 @@ function isCategory(value: string | null): value is RecipeCategory {
 export function RecipesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState('');
+  const navigate = useNavigate();
   const { isFavorite, toggleFavorite, addOrderItem } = useAppStore();
   const { showToast } = useToast();
 
@@ -70,12 +71,22 @@ export function RecipesPage() {
     <div>
       <PageHeader
         title="菜谱大全"
-        subtitle={`${RECIPES.length} 道私房菜，慢慢做成我们的味道`}
+        subtitle={`${getAllRecipes().length} 道私房菜，慢慢做成我们的味道`}
         right={
-          <Badge tone="pink" className="mt-1 px-3 py-1.5">
-            <ChefHat className="h-3 w-3" />
-            {RECIPES.length} 道
-          </Badge>
+          <div className="mt-1 flex items-center gap-1.5">
+            <Badge tone="pink" className="px-3 py-1.5">
+              <ChefHat className="h-3 w-3" />
+              {getAllRecipes().length} 道
+            </Badge>
+            <Button
+              size="sm"
+              variant="soft"
+              onClick={() => navigate('/add')}
+              leadingIcon={<Wand2 className="h-3.5 w-3.5" />}
+            >
+              AI 加菜
+            </Button>
+          </div>
         }
       />
 

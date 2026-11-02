@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import {
+  DEFAULT_AI_SETTINGS,
   DEFAULT_SETTINGS,
   EMPTY_ORDER,
   MAX_ORDER_QUANTITY,
@@ -15,9 +16,12 @@ import {
   type DiaryEntry,
   type FavoriteRecord,
   type OrderState,
+  type AiSettings,
+  type Recipe,
   type RecipeImageMap,
   type Settings,
 } from '../types';
+import { setRuntimeCustomRecipes } from '../data/recipes';
 import { clearAllAppData, getAppStorageSize, STORAGE_KEYS } from '../lib/storage';
 import {
   clearRecipeImages,
@@ -30,6 +34,8 @@ import {
   applyDiaryDraft,
   createDiaryEntry,
   createFavorite,
+  parseAiSettings,
+  parseCustomRecipes,
   parseDiary,
   parseFavorites,
   parseOrder,
@@ -42,7 +48,13 @@ interface AppStoreValue {
   order: OrderState;
   diary: DiaryEntry[];
   recipeImages: RecipeImageMap;
+  /** AI 生成并保存的自定义菜谱（只在本机） */
+  customRecipes: Recipe[];
+  aiSettings: AiSettings;
   storageSize: number;
+  addCustomRecipe: (recipe: Recipe) => void;
+  deleteCustomRecipe: (recipeId: string) => void;
+  updateAiSettings: (patch: Partial<AiSettings>) => void;
   updateSettings: (patch: Partial<Settings>) => void;
   isFavorite: (recipeId: string) => boolean;
   getFavorite: (recipeId: string) => FavoriteRecord | undefined;
@@ -90,8 +102,21 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     EMPTY_DIARY,
     parseDiary,
   );
+  const [customRecipes, setCustomRecipes, resetCustomRecipes] = usePersistentState<Recipe[]>(
+    STORAGE_KEYS.customRecipes,
+    [],
+    parseCustomRecipes,
+  );
+  const [aiSettings, setAiSettings, resetAiSettings] = usePersistentState<AiSettings>(
+    STORAGE_KEYS.aiSettings,
+    DEFAULT_AI_SETTINGS,
+    parseAiSettings,
+  );
   const [recipeImages, setRecipeImages] = useState<RecipeImageMap>({});
   const [storageSize, setStorageSize] = useState(0);
+
+  // 让数据层的查询函数（搜索 / 详情 / 转盘 / 热门）自动带上自定义菜谱
+  setRuntimeCustomRecipes(customRecipes);
 
   // Custom recipe images live in IndexedDB; localStorage now only holds the
   // small structured state below.
@@ -311,18 +336,44 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const addCustomRecipe = useCallback(
+    (recipe: Recipe) => {
+      setCustomRecipes((current) => [recipe, ...current.filter((item) => item.id !== recipe.id)]);
+    },
+    [setCustomRecipes],
+  );
+
+  const deleteCustomRecipe = useCallback(
+    (recipeId: string) => {
+      setCustomRecipes((current) => current.filter((item) => item.id !== recipeId));
+      void deleteRecipeImage(recipeId).catch((error) => {
+        console.warn('[PrincessKitchen] 删除自定义菜谱图片失败', error);
+      });
+    },
+    [setCustomRecipes],
+  );
+
+  const updateAiSettings = useCallback(
+    (patch: Partial<AiSettings>) => {
+      setAiSettings((current) => ({ ...current, ...patch }));
+    },
+    [setAiSettings],
+  );
+
   const resetAllData = useCallback(() => {
     clearAllAppData();
     resetSettings();
     resetFavorites();
     resetOrder();
     resetDiary();
+    resetCustomRecipes();
+    resetAiSettings();
     setRecipeImages({});
     void clearRecipeImages().catch((error) => {
       console.warn('[PrincessKitchen] 清空自定义图片失败', error);
     });
     setStorageSize(0);
-  }, [resetSettings, resetFavorites, resetOrder, resetDiary]);
+  }, [resetSettings, resetFavorites, resetOrder, resetDiary, resetCustomRecipes, resetAiSettings]);
 
   const recipeImageChars = useMemo(
     () => Object.values(recipeImages).reduce((total, value) => total + value.length, 0),
@@ -336,8 +387,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       order,
       diary,
       recipeImages,
+      customRecipes,
+      aiSettings,
       storageSize,
       recipeImageChars,
+      addCustomRecipe,
+      deleteCustomRecipe,
+      updateAiSettings,
       updateSettings,
       isFavorite,
       getFavorite,
@@ -364,8 +420,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       order,
       diary,
       recipeImages,
+      customRecipes,
+      aiSettings,
       storageSize,
       recipeImageChars,
+      addCustomRecipe,
+      deleteCustomRecipe,
+      updateAiSettings,
       updateSettings,
       isFavorite,
       getFavorite,

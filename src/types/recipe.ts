@@ -62,4 +62,8 @@ export interface Recipe {
   popularity: number;
   /** Shown in the home page hero rotation. */
   featured?: boolean;
+  /** 用户用 AI 生成并保存的菜谱（只在本机） */
+  custom?: boolean;
+  /** 自定义菜谱的保存时间 */
+  createdAt?: string;
 }

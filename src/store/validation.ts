@@ -1,5 +1,8 @@
 import {
+  DEFAULT_AI_SETTINGS,
   DEFAULT_SETTINGS,
+  DIFFICULTIES,
+  RECIPE_CATEGORIES,
   EMPTY_ORDER,
   MAX_ORDER_QUANTITY,
   THEME_OPTIONS,
@@ -7,6 +10,8 @@ import {
   type DiaryEntry,
   type FavoriteRecord,
   type OrderState,
+  type AiSettings,
+  type Recipe,
   type RecipeImageMap,
   type Settings,
 } from '../types';
@@ -157,4 +162,92 @@ export function parseRecipeImages(raw: unknown): RecipeImageMap {
     images[recipeId] = value;
   });
   return images;
+}
+
+/* ------------------------------------------------------------------ */
+/* AI：自定义菜谱与 AI 设置                                            */
+/* ------------------------------------------------------------------ */
+
+const asText = (value: unknown, max: number): string =>
+  typeof value === 'string' ? value.trim().slice(0, max) : '';
+
+const asInt = (value: unknown, min: number, max: number, fallback: number): number => {
+  const num = typeof value === 'number' ? value : Number.parseFloat(String(value));
+  if (!Number.isFinite(num)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(num)));
+};
+
+function parseRecipe(raw: unknown): Recipe | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const value = raw as Record<string, unknown>;
+  const id = asText(value.id, 64);
+  const name = asText(value.name, 40);
+  if (!id.startsWith('custom_') || !name) return null;
+  if (!(RECIPE_CATEGORIES as readonly string[]).includes(String(value.category))) return null;
+
+  const ingredients = (Array.isArray(value.ingredients) ? value.ingredients : [])
+    .map((item) => {
+      const record = (item ?? {}) as Record<string, unknown>;
+      const name = asText(record.name, 40);
+      const amount = asText(record.amount, 40);
+      return name && amount ? { name, amount } : null;
+    })
+    .filter((item): item is { name: string; amount: string } => Boolean(item));
+
+  const steps = (Array.isArray(value.steps) ? value.steps : [])
+    .map((item) => {
+      const record = (item ?? {}) as Record<string, unknown>;
+      const title = asText(record.title, 60);
+      const description = asText(record.description, 800);
+      if (!title || !description) return null;
+      const tip = asText(record.tip, 300);
+      return tip ? { title, description, tip } : { title, description };
+    })
+    .filter((item): item is { title: string; description: string; tip?: string } => Boolean(item));
+
+  if (!ingredients.length || !steps.length) return null;
+
+  const difficulty = (DIFFICULTIES as readonly string[]).includes(String(value.difficulty))
+    ? (value.difficulty as Recipe['difficulty'])
+    : '简单';
+
+  return {
+    id,
+    name,
+    category: value.category as Recipe['category'],
+    coverImage: '',
+    description: asText(value.description, 300),
+    ingredients,
+    steps,
+    difficulty,
+    cookingTime: asInt(value.cookingTime, 5, 600, 30),
+    servings: asText(value.servings, 20) || '2 人份',
+    price: asInt(value.price, 1, 999, 40),
+    source: asText(value.source, 120) || 'AI 生成（未核对）',
+    tags: (Array.isArray(value.tags) ? value.tags : [])
+      .map((tag) => asText(tag, 20))
+      .filter(Boolean)
+      .slice(0, 6),
+    popularity: asInt(value.popularity, 0, 100, 50),
+    custom: true,
+    createdAt: asText(value.createdAt, 40) || new Date().toISOString(),
+  };
+}
+
+export function parseCustomRecipes(raw: unknown): Recipe[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map(parseRecipe).filter((recipe): recipe is Recipe => Boolean(recipe));
+}
+
+export function parseAiSettings(raw: unknown): AiSettings {
+  if (!raw || typeof raw !== 'object') return DEFAULT_AI_SETTINGS;
+  const value = raw as Partial<AiSettings>;
+  const provider = value.textProvider === 'agnes' ? 'agnes' : 'deepseek';
+  return {
+    textProvider: provider,
+    textApiKey: asText(value.textApiKey, 200),
+    textModel: asText(value.textModel, 60),
+    imageApiKey: asText(value.imageApiKey, 200),
+    imageModel: asText(value.imageModel, 60) || DEFAULT_AI_SETTINGS.imageModel,
+  };
 }

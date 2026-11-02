@@ -12,7 +12,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
-import { RECIPES, findRecipeByName } from '../data/recipes';
+import { findRecipeByName, getAllRecipes } from '../data/recipes';
 import type { Recipe, RecipeCategory } from '../types';
 import { useAppStore } from '../store/AppStore';
 import { useToast } from '../components/ui/Toast';
@@ -79,7 +79,7 @@ export function WheelPage() {
   // dish artwork or show the wheel with blank image cards.
   const photoRecipes = useMemo(
     () =>
-      RECIPES.filter(
+      getAllRecipes().filter(
         (recipe) =>
           Boolean(recipeImages[recipe.id] ?? recipe.coverImage) &&
           !(excludeCooked && excludedIds.has(recipe.id)),
